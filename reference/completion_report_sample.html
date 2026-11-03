@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>완료보고서 샘플 - 조선소 통합관리</title>
+<style>
+:root{--navy:#12294a;--blue:#2563eb;--bg:#f2f4f8;--line:#d9dee8;--text:#1f2937;--muted:#6b7280}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Malgun Gothic','Apple SD Gothic Neo','Noto Sans KR',system-ui,sans-serif;color:var(--text);background:var(--bg);line-height:1.6;font-size:14px}
+header{background:var(--navy);color:#fff;padding:24px 16px}
+header div,main{max-width:980px;margin:0 auto}
+header small{opacity:.7;letter-spacing:2px}
+header h1{margin:4px 0 8px;font-size:22px}
+header .meta{font-size:13px;opacity:.85}
+main{padding:18px 16px 48px}
+section{background:#fff;border:1px solid var(--line);border-radius:8px;padding:14px 18px;margin-bottom:14px}
+h2{margin:0 0 8px;font-size:16px;color:var(--navy)}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+th{background:#eef1f6;white-space:nowrap}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+pre{white-space:pre-wrap;margin:0;font:inherit}
+code{background:#eef1f6;padding:1px 5px;border-radius:4px;font-size:12.5px}
+.tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:10px 0 0}
+button,label.btn{height:30px;padding:0 14px;border:1px solid #3b5a8c;background:transparent;color:#fff;border-radius:5px;cursor:pointer;font:inherit;display:inline-flex;align-items:center}
+button:hover,label.btn:hover{background:#1b3a66}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:10px}
+.kpi{border:1px solid var(--line);border-radius:8px;padding:8px 12px;background:#f8fafc}
+.kpi .l{color:var(--muted);font-size:12px}.kpi .v{font-size:20px;font-weight:700}
+.badge{display:inline-block;padding:0 8px;border-radius:10px;font-size:12px;background:#dbeafe;color:#1d4ed8}
+.note{color:var(--muted);font-size:12.5px;margin:6px 0 0}
+.sample{background:#fef3c7;color:#92400e;border-radius:4px;padding:1px 8px;font-size:12px}
+ul{margin:4px 0;padding-left:20px}
+details{margin:4px 0}summary{cursor:pointer;color:var(--blue)}
+.fig{background:#f8fafc;border:1px dashed var(--line);border-radius:6px;padding:10px;font-family:Consolas,monospace;font-size:12.5px;white-space:pre}
+[contenteditable]:hover{background:#fffbe6}[contenteditable]:focus{outline:2px solid #bfdbfe;background:#fff}
+.essay{min-height:220px;border:1px solid var(--line);border-radius:6px;padding:10px 12px;white-space:pre-wrap;margin-top:8px}
+.essay:empty:before{content:attr(data-ph);color:var(--muted)}
+.tools2{margin:8px 0 0}
+.add,.rm{border:1px solid var(--line);background:#fff;color:var(--text);border-radius:5px;cursor:pointer;font:inherit;height:26px;padding:0 10px}
+.add:hover{background:#f3f6fb}.rm{padding:0 7px;color:#b91c1c}.rm:hover{background:#fef2f2}
+@media print{header{background:#fff;color:#000;border-bottom:2px solid #000}.tools,.tools2,.noprint{display:none}body{background:#fff}.essay{border:0;padding:0}}
+</style>
+</head>
+<body>
+<header><div>
+  <small>COMPLETION REPORT</small>
+  <h1>조선소 통합관리 시스템 완료보고서 <span class="sample" id="sampleTag">샘플 데이터</span></h1>
+  <div class="meta">작성자: 홍길동 · 작성일: 2026-11-02 · 사용 도구: Claude Code (<span id="hdrModel">claude-sonnet-5-5</span>)</div>
+  <div class="tools">
+    <label class="btn">report_data.json 불러오기<input type="file" id="file" accept=".json" hidden></label>
+    <button id="print">인쇄 / PDF 저장</button>
+  </div>
+</div></header>
+
+<main>
+<section>
+<h2>1. 개요</h2>
+<p>조선소 통합관리 목업(<code>shipyard_mockup.html</code>)을 FastAPI + Vue3 3-tier 구조로 구현하였다. 목업의 localStorage 데이터를 RDB로 옮기고 업무 규칙(도면 게이트, 권한, 상태 계산)을 서버로 이전하였다.</p>
+<table id="tblScope">
+<thead><tr><th style="width:80px">구분</th><th>기능</th><th style="width:90px">구현</th><th>비고</th><th class="noprint" style="width:40px"></th></tr></thead>
+<tbody>
+<tr><td contenteditable>필수</td><td contenteditable>가입/승인/로그인(JWT), 권한</td><td contenteditable>완료</td><td contenteditable>메뉴·액션 단위 403 처리</td><td class="noprint"><button class="rm" title="행 삭제">✕</button></td></tr>
+<tr><td contenteditable>선택</td><td contenteditable>대시보드, 간트</td><td contenteditable>일부</td><td contenteditable>간트 드래그 이동 미구현</td><td class="noprint"><button class="rm" title="행 삭제">✕</button></td></tr>
+</tbody>
+</table>
+<p class="tools2"><button class="add" id="addScope">+ 행 추가</button> <span class="note">셀을 클릭해 바로 수정할 수 있습니다.</span></p>
+</section>
+
+<section>
+<h2>2. Skill / MCP 사용 내역</h2>
+<p class="note">아래 "호출 횟수"는 추출 스크립트가 자동 집계한 값이고, "용도·효과"는 작성자가 직접 적는다.</p>
+<table id="tblSkill"><thead><tr><th>종류</th><th>이름</th><th class="n">호출 횟수</th><th>용도</th><th>효과(증빙)</th></tr></thead><tbody></tbody></table>
+</section>
+
+<section>
+<h2>3. 토큰 사용량</h2>
+<div class="kpis" id="kpis"></div>
+<table id="tblModel"><thead><tr><th>세션</th><th class="n">입력</th><th class="n">출력</th><th class="n">캐시 생성</th><th class="n">캐시 읽기</th></tr></thead><tbody></tbody></table>
+<p class="note" id="period"></p>
+</section>
+
+<section>
+<h2>4. 입력 프롬프트</h2>
+<p class="note">입력 = 입력 + 캐시 생성 + 캐시 읽기 토큰 합계 (해당 프롬프트 처리 중 발생한 모든 API 호출 기준).</p>
+<table id="tblPrompt"><thead><tr><th class="n">#</th><th>시각</th><th>프롬프트 원문</th><th class="n">입력 토큰</th><th class="n">출력 토큰</th></tr></thead><tbody></tbody></table>
+</section>
+
+<section>
+<h2>5. 바이브 코딩 방식 (서술)</h2>
+<p class="note">개발 전체를 어떤 방식으로 진행했는지 자유롭게 서술하세요. 예) 처음 AI에게 맡긴 범위와 이후 진행 순서, 프롬프트를 쓰는 방식, Skill·MCP를 쓴 이유, AI 결과물을 검증·수정한 방법, 막혔던 지점과 해결 과정, 아쉬운 점.</p>
+<div class="essay" contenteditable data-ph="여기에 작성하세요."></div>
+</section>
+</main>
+
+<script>
+const SAMPLE = {
+  period: { start: '2026-11-02T09:00:00Z', end: '2026-11-02T12:40:00Z' },
+  sessions: [{ id: 'a1b2c3d4', input_tokens: 1200, output_tokens: 48000, cache_creation_input_tokens: 310000, cache_read_input_tokens: 5200000 }],
+  models: { 'claude-sonnet-5-5': 180 },
+  total: { input_tokens: 1200, output_tokens: 48000, cache_creation_input_tokens: 310000, cache_read_input_tokens: 5200000, api_calls: 180 },
+  prompts: [
+    { no: 1, time: '2026-11-02T09:02:00Z', text: '첨부한 shipyard_mockup.html 을 분석해서 FastAPI+Vue3 3-tier 구조로 옮길 설계안을 알려줘', tokens: { input_tokens: 10, cache_creation_input_tokens: 40000, cache_read_input_tokens: 90000, output_tokens: 5200 } },
+    { no: 2, time: '2026-11-02T09:30:00Z', text: 'backend 폴더에 router/service/repository 구조로 호선·공정·도면 API를 만들어줘', tokens: { input_tokens: 20, cache_creation_input_tokens: 80000, cache_read_input_tokens: 600000, output_tokens: 14000 } }
+  ],
+  skills: { 'frontend-design': 2, 'webapp-testing': 1 },
+  mcp: { 'mcp__playwright__browser_navigate': 12, 'mcp__context7__query-docs': 4 }
+};
+const $ = s => document.querySelector(s), n = v => (v || 0).toLocaleString('ko-KR');
+const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const fmtT = t => t ? new Date(t).toLocaleString('ko-KR', { hour12: false }).slice(0, -3) : '';
+const inSum = k => k.input_tokens + k.cache_creation_input_tokens + k.cache_read_input_tokens;
+
+function render(d, isSample) {
+  $('#sampleTag').hidden = !isSample;
+  const mdl = Object.keys(d.models || {});
+  if (mdl.length) $('#hdrModel').textContent = mdl.join(', ');
+  const t = d.total;
+  $('#kpis').innerHTML = [['입력 토큰', t.input_tokens], ['출력 토큰', t.output_tokens], ['캐시 생성', t.cache_creation_input_tokens], ['캐시 읽기', t.cache_read_input_tokens], ['API 호출', t.api_calls], ['프롬프트 수', d.prompts.length]]
+    .map(([l, v]) => `<div class="kpi"><div class="l">${l}</div><div class="v">${n(v)}</div></div>`).join('');
+  $('#tblModel tbody').innerHTML = (d.sessions || []).map(s => `<tr><td>${esc(s.id)}</td><td class="n">${n(s.input_tokens)}</td><td class="n">${n(s.output_tokens)}</td><td class="n">${n(s.cache_creation_input_tokens)}</td><td class="n">${n(s.cache_read_input_tokens)}</td></tr>`).join('')
+    + `<tr><th>합계</th><th class="n">${n(t.input_tokens)}</th><th class="n">${n(t.output_tokens)}</th><th class="n">${n(t.cache_creation_input_tokens)}</th><th class="n">${n(t.cache_read_input_tokens)}</th></tr>`;
+  $('#period').textContent = d.period && d.period.start ? `기간: ${fmtT(d.period.start)} ~ ${fmtT(d.period.end)} · 모델: ${mdl.map(m => `${m}(${d.models[m]}회)`).join(', ')}` : '';
+  const rows = [...Object.entries(d.skills || {}).map(([k, v]) => ['Skill', k, v]), ...Object.entries(d.mcp || {}).map(([k, v]) => ['MCP', k, v])];
+  $('#tblSkill tbody').innerHTML = rows.length ? rows.map(r => `<tr><td><span class="badge">${r[0]}</span></td><td>${esc(r[1])}</td><td class="n">${n(r[2])}</td><td contenteditable>(작성)</td><td contenteditable>(작성)</td></tr>`).join('') : '<tr><td colspan="5">사용 기록 없음 — 필수 조건 미충족</td></tr>';
+  $('#tblPrompt tbody').innerHTML = d.prompts.map(p => `<tr><td class="n">${p.no}</td><td>${fmtT(p.time)}</td><td><details><summary>${esc(p.preview || p.text.replace(/\s+/g, ' ').slice(0, 80))}</summary><pre>${esc(p.text)}</pre></details></td><td class="n">${n(inSum(p.tokens))}</td><td class="n">${n(p.tokens.output_tokens)}</td></tr>`).join('');
+}
+render(SAMPLE, true);
+$('#file').addEventListener('change', e => {
+  const f = e.target.files[0]; if (!f) return;
+  f.text().then(s => { try { render(JSON.parse(s), false); } catch (x) { alert('JSON 형식이 올바르지 않습니다.'); } });
+});
+$('#print').onclick = () => print();
+$('#addScope').onclick = () => {
+  const tr = document.createElement('tr');
+  tr.innerHTML = '<td contenteditable>필수</td><td contenteditable></td><td contenteditable></td><td contenteditable></td><td class="noprint"><button class="rm" title="행 삭제">✕</button></td>';
+  $('#tblScope tbody').appendChild(tr); tr.children[1].focus();
+};
+$('#tblScope').addEventListener('click', e => { if (e.target.classList.contains('rm')) e.target.closest('tr').remove(); });
+</script>
+</body>
+</html>

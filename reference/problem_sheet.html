@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>바이브 코딩 과제 - 조선소 통합관리</title>
+<style>
+:root{--navy:#12294a;--blue:#2563eb;--bg:#f2f4f8;--line:#d9dee8;--text:#1f2937;--muted:#6b7280}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Malgun Gothic','Apple SD Gothic Neo','Noto Sans KR',system-ui,sans-serif;color:var(--text);background:var(--bg);line-height:1.65}
+header{background:var(--navy);color:#fff;padding:28px 16px}
+header div,main{max-width:860px;margin:0 auto}
+header small{opacity:.7;letter-spacing:2px}
+header h1{margin:4px 0 0;font-size:24px}
+main{padding:20px 16px 48px}
+section{background:#fff;border:1px solid var(--line);border-radius:8px;padding:16px 20px;margin-bottom:14px}
+h2{margin:0 0 8px;font-size:17px;color:var(--navy)}
+ol,ul{margin:6px 0;padding-left:22px}
+li{margin:4px 0}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{border:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top}
+th{background:#eef1f6}
+code{background:#eef1f6;padding:1px 5px;border-radius:4px;font-size:13px}
+.tag{display:inline-block;font-size:12px;padding:1px 8px;border-radius:10px;background:#dbeafe;color:#1d4ed8;margin-right:4px}
+.tag.o{background:#e5e7eb;color:#374151}
+.note{color:var(--muted);font-size:13px}
+@media print{header{background:#fff;color:#000;border-bottom:2px solid #000}body{background:#fff}section{break-inside:avoid}}
+</style>
+</head>
+<body>
+<header><div><small>VIBE CODING ASSIGNMENT</small><h1>조선소 통합관리 시스템 구현</h1></div></header>
+<main>
+
+<section>
+<h2>1. 과제 개요</h2>
+<p>제공된 <code>shipyard_mockup.html</code>은 호선·공정·도면을 관리하는 단일 HTML 목업입니다. 데이터는 브라우저 <code>localStorage</code>에만 저장되고 업무 규칙도 모두 화면 JS 안에 있습니다.
+이 목업의 <b>기능을 FastAPI + Vue3 기반 3-tier 웹 시스템으로 구현</b>하세요. Claude Code로 개발하며, 사용한 프롬프트와 토큰을 완료보고서에 남깁니다.</p>
+</section>
+
+<section>
+<h2>2. 조건</h2>
+<ol>
+<li><b>기능은 목업대로 동작</b>해야 하며, UI/UX는 목업을 따라 하지 않고 <b>자유롭게 개선</b>해도 됩니다.</li>
+<li><b>Skill과 MCP를 반드시 사용</b>하고, 완료보고서에 무엇을·왜·어디에 썼는지 기록합니다.</li>
+<li><b>FastAPI + Vue3 + SQLite 3-tier</b> 구조로 개발합니다.</li>
+<li>완료보고서에 <b>입력한 프롬프트</b>와 <b>토큰 사용량</b>을 기재합니다. (<code>extract_usage.py</code>로 추출)</li>
+</ol>
+</section>
+
+<section>
+<h2>3. 구현 범위</h2>
+<table>
+<tr><th style="width:90px">구분</th><th>기능</th></tr>
+<tr><td><span class="tag">필수</span></td><td>
+회원가입 → 관리자 승인 → 로그인(JWT), 권한그룹별 메뉴 접근 제어<br>
+호선 CRUD (마일스톤·블록 포함, 삭제 시 하위 데이터 함께 삭제)<br>
+공정 계획 CRUD, 선·후행 공정 연결(순환 연결 불가), 일별 실적 입력 → 진행률·상태 자동 계산<br>
+도면 CRUD, 개정(Rev) 이력, 2단계 결재, 배포
+</td></tr>
+<tr><td><span class="tag">필수</span></td><td>
+<b>업무 규칙은 서버에서 검증</b>: ① 필수 연계 도면이 배포되지 않으면 공정 착수 불가 ② 권한 없는 사용자의 쓰기 요청은 거부(403) ③ 중복 아이디/이메일/전화번호 가입 불가
+</td></tr>
+<tr><td><span class="tag o">선택</span></td><td>
+대시보드(KPI·지연 공정), 공정 간트 화면, 도면 개정 영향 경고(최근 30일), 호선 상태 자동 전이, 2차 인증(OTP), 도면 PDF 업로드, 지역 날씨(MCP)
+</td></tr>
+</table>
+<p class="note">기준일은 목업과 같이 <code>2026-10-19</code>로 고정하고, 시드 데이터와 데모 계정(admin / park.pm / lee.dwg / han.wk / choi.qa)도 목업 것을 사용합니다.</p>
+</section>
+
+<section>
+<h2>4. 제출물</h2>
+<ul>
+<li>소스 코드 (<code>backend/</code>, <code>frontend/</code>) 및 실행 방법 README</li>
+<li>완료보고서 (<code>completion_report_sample.html</code> 양식 참고)
+  <ul><li>구현 범위 / Skill·MCP 사용 내역 / 토큰 사용량 / 입력 프롬프트 / 바이브 코딩 방식(서술)</li></ul></li>
+<li>완료보고서 <b>PDF</b> (보고서 화면의 <b>인쇄 / PDF 저장</b> 버튼으로 저장)</li>
+<li><code>report_data.json</code> (추출 스크립트 결과 원본)</li>
+</ul>
+</section>
+
+<section>
+<h2>5. 프롬프트·토큰 추출 방법</h2>
+<ol>
+<li>작업을 마친 뒤 프로젝트 폴더에서 아래 명령을 실행합니다.</li>
+</ol>
+<p><code>python extract_usage.py</code></p>
+<ol start="2"><li>생성된 <code>report_data.json</code>을 완료보고서 HTML의 <b>JSON 불러오기</b> 버튼으로 열면 프롬프트·토큰·Skill·MCP 표가 채워집니다.</li></ol>
+</section>
+
+</main>
+</body>
+</html>
