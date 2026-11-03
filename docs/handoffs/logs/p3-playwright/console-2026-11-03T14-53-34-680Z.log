@@ -1,0 +1,4 @@
+[     112ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:5173/favicon.ico:0
+[     558ms] [INFO] Autofocus processing was blocked because a document already has a focused element. @ http://localhost:5173/login:0
+[   33899ms] [ERROR] Failed to load resource: the server responded with a status of 409 (Conflict) @ http://localhost:5173/api/hulls/8004/plans:0
+[   41951ms] [ERROR] Failed to load resource: the server responded with a status of 409 (Conflict) @ http://localhost:5173/api/hulls/8004/plans:0

@@ -1,0 +1,221 @@
+- generic [ref=e13]:
+  - banner [ref=e14]:
+    - generic [ref=e15]: SWP Shipyard
+    - generic [ref=e16]:
+      - generic [ref=e17]: 박공정 님
+      - generic [ref=e18]: 공정관리자 · 2026-10-19
+    - button "로그아웃" [ref=e19] [cursor=pointer]
+  - generic [ref=e20]:
+    - navigation [ref=e21]:
+      - generic [ref=e22]: MENU
+      - list [ref=e23]:
+        - listitem [ref=e24]:
+          - generic [ref=e25] [cursor=pointer]: 대시보드
+        - listitem [ref=e26]:
+          - generic [ref=e27] [cursor=pointer]: ▾ 호선관리
+          - list [ref=e28]:
+            - listitem [ref=e29]:
+              - generic [ref=e30] [cursor=pointer]: 호선 목록
+        - listitem [ref=e31]:
+          - generic [ref=e32] [cursor=pointer]: ▾ 공정관리
+          - list [ref=e33]:
+            - listitem [ref=e34]:
+              - generic [ref=e35] [cursor=pointer]: 공정 계획
+            - listitem [ref=e36]:
+              - generic [ref=e37] [cursor=pointer]: 공정 실적
+        - listitem [ref=e38]:
+          - generic [ref=e39] [cursor=pointer]: ▾ 도면관리
+          - list [ref=e40]:
+            - listitem [ref=e41]:
+              - generic [ref=e42] [cursor=pointer]: 도면 목록
+    - main [ref=e43]:
+      - tablist [ref=e44]:
+        - tab "대시보드 탭 닫기" [ref=e45] [cursor=pointer]:
+          - generic [ref=e46]: 대시보드
+          - button "탭 닫기" [ref=e47]: ×
+        - tab "공정 계획 탭 닫기" [ref=e54] [cursor=pointer]:
+          - generic [ref=e55]: 공정 계획
+          - button "탭 닫기" [ref=e56]: ×
+        - button "다른 탭 닫기" [ref=e57] [cursor=pointer]
+      - generic [ref=e58]:
+        - heading "공정 계획" [level=2] [ref=e60]
+        - generic [ref=e61]:
+          - combobox [ref=e62]:
+            - option "8001 SWP LNG 174K 1호" [selected]
+            - option "8002 Ocean Titan"
+            - option "8003 Blue Horizon 15K"
+            - option "8004 Star Chemi"
+            - option "8005 Aurora LNG"
+          - combobox [ref=e63]:
+            - option "블록 전체" [selected]
+            - option "101 선수부 블록"
+            - option "201 중앙부 블록"
+            - option "301 선미 곡블록"
+            - option "401 엔진룸 블록"
+            - option "501 상부구조 블록"
+          - combobox [ref=e64]:
+            - option "축소"
+            - option "보통" [selected]
+            - option "확대"
+          - generic [ref=e65]: 호선 진척 65%
+          - button "+ 공정 추가" [ref=e66] [cursor=pointer]
+        - generic [ref=e67]:
+          - generic [ref=e68]: 계획
+          - generic [ref=e70]: 착수가능
+          - generic [ref=e72]: 진행
+          - generic [ref=e74]: 완료
+          - generic [ref=e76]: 지연
+          - generic [ref=e78]: 📐 도면 대기
+          - generic [ref=e79]: — 선후행 연결선 / 빨간선 = 오늘(2026-10-19)
+        - generic [ref=e81]:
+          - generic [ref=e82]:
+            - generic [ref=e83]: 블록 / 공정
+            - generic [ref=e84]:
+              - generic [ref=e85]: "2026.06"
+              - generic [ref=e86]: "2026.07"
+              - generic [ref=e87]: "2026.08"
+              - generic [ref=e88]: "2026.09"
+              - generic [ref=e89]: "2026.10"
+              - generic [ref=e90]: "2026.11"
+              - generic [ref=e91]: "2026.12"
+              - generic [ref=e92]: "2027.01"
+              - generic [ref=e93]: "2027.02"
+              - generic [ref=e94]: "2027.03"
+          - generic [ref=e95]:
+            - generic [ref=e96] [cursor=pointer]:
+              - generic "[101] 강재절단" [ref=e97]:
+                - generic [ref=e98]: "101"
+                - text: 강재절단
+              - generic "[101] 강재절단 2026-06-15 ~ 2026-06-28 진척 100% · 완료" [ref=e100]
+            - generic [ref=e102] [cursor=pointer]:
+              - generic "[101] 소조립" [ref=e103]:
+                - generic [ref=e104]: "101"
+                - text: 소조립
+              - generic "[101] 소조립 2026-06-29 ~ 2026-07-18 진척 100% · 완료" [ref=e106]
+            - generic [ref=e108] [cursor=pointer]:
+              - generic "[101] 대조립" [ref=e109]:
+                - generic [ref=e110]: "101"
+                - text: 대조립
+              - generic "[101] 대조립 2026-07-19 ~ 2026-08-15 진척 100% · 완료" [ref=e112]
+            - generic [ref=e114] [cursor=pointer]:
+              - generic "[101] 도장" [ref=e115]:
+                - generic [ref=e116]: "101"
+                - text: 도장
+              - generic "[101] 도장 2026-08-16 ~ 2026-08-31 진척 100% · 완료" [ref=e118]
+            - generic [ref=e120] [cursor=pointer]:
+              - generic "[101] 탑재" [ref=e121]:
+                - generic [ref=e122]: "101"
+                - text: 탑재
+              - generic "[101] 탑재 2026-09-01 ~ 2026-10-12 진척 100% · 완료" [ref=e124]
+            - generic [ref=e126] [cursor=pointer]:
+              - generic "[201] 강재절단" [ref=e127]:
+                - generic [ref=e128]: "201"
+                - text: 강재절단
+              - generic "[201] 강재절단 2026-07-05 ~ 2026-07-18 진척 100% · 완료" [ref=e130]
+            - generic [ref=e132] [cursor=pointer]:
+              - generic "[201] 소조립" [ref=e133]:
+                - generic [ref=e134]: "201"
+                - text: 소조립
+              - generic "[201] 소조립 2026-07-19 ~ 2026-08-07 진척 100% · 완료" [ref=e136]
+            - generic [ref=e138] [cursor=pointer]:
+              - generic "[201] 대조립" [ref=e139]:
+                - generic [ref=e140]: "201"
+                - text: 대조립
+              - generic "[201] 대조립 2026-08-08 ~ 2026-09-04 진척 100% · 완료" [ref=e142]
+            - generic [ref=e144] [cursor=pointer]:
+              - generic "[201] 도장" [ref=e145]:
+                - generic [ref=e146]: "201"
+                - text: 도장
+              - generic "[201] 도장 2026-09-05 ~ 2026-09-20 진척 100% · 완료" [ref=e148]
+            - generic [ref=e150] [cursor=pointer]:
+              - generic "[201] 탑재" [ref=e151]:
+                - generic [ref=e152]: "201"
+                - text: 탑재
+              - generic "[201] 탑재 2026-09-21 ~ 2026-11-01 진척 70% · 진행" [ref=e154]
+            - generic [ref=e156] [cursor=pointer]:
+              - generic "[301] 강재절단" [ref=e157]:
+                - generic [ref=e158]: "301"
+                - text: 강재절단
+              - generic "[301] 강재절단 2026-07-25 ~ 2026-08-07 진척 100% · 완료" [ref=e160]
+            - generic [ref=e162] [cursor=pointer]:
+              - generic "[301] 소조립" [ref=e163]:
+                - generic [ref=e164]: "301"
+                - text: 소조립
+              - generic "[301] 소조립 2026-08-08 ~ 2026-08-27 진척 100% · 완료" [ref=e166]
+            - generic [ref=e168] [cursor=pointer]:
+              - generic "[301] 대조립" [ref=e169]:
+                - generic [ref=e170]: "301"
+                - text: 대조립
+              - generic "[301] 대조립 2026-08-28 ~ 2026-09-24 진척 100% · 완료" [ref=e172]
+            - generic [ref=e174] [cursor=pointer]:
+              - generic "[301] 도장" [ref=e175]:
+                - generic [ref=e176]: "301"
+                - text: 도장
+              - generic "[301] 도장 2026-09-25 ~ 2026-10-10 진척 60% · 지연" [ref=e178]
+            - generic [ref=e180] [cursor=pointer]:
+              - generic "[301] 탑재" [ref=e181]:
+                - generic [ref=e182]: "301"
+                - text: 탑재
+              - generic "[301] 탑재 2026-10-11 ~ 2026-11-21 진척 0% · 계획" [ref=e184]
+            - generic [ref=e185] [cursor=pointer]:
+              - generic "[401] 강재절단" [ref=e186]:
+                - generic [ref=e187]: "401"
+                - text: 강재절단
+              - generic "[401] 강재절단 2026-08-14 ~ 2026-08-27 진척 100% · 완료" [ref=e189]
+            - generic [ref=e191] [cursor=pointer]:
+              - generic "[401] 소조립" [ref=e192]:
+                - generic [ref=e193]: "401"
+                - text: 소조립
+              - generic "[401] 소조립 2026-08-28 ~ 2026-09-16 진척 100% · 완료" [ref=e195]
+            - generic [ref=e197] [cursor=pointer]:
+              - generic "[401] 대조립" [ref=e198]:
+                - generic [ref=e199]: "401"
+                - text: 대조립
+              - generic "[401] 대조립 2026-09-17 ~ 2026-10-14 진척 100% · 완료" [ref=e201]
+            - generic [ref=e203] [cursor=pointer]:
+              - generic "[401] 도장" [ref=e204]:
+                - generic [ref=e205]: "401"
+                - text: 도장
+              - generic "[401] 도장 2026-10-15 ~ 2026-10-30 진척 30% · 진행" [ref=e207]
+            - generic [ref=e209] [cursor=pointer]:
+              - generic "[401] 탑재" [ref=e210]:
+                - generic [ref=e211]: "401"
+                - text: 탑재
+              - generic "[401] 탑재 2026-10-31 ~ 2026-12-11 진척 0% · 계획" [ref=e213]
+            - generic [ref=e214] [cursor=pointer]:
+              - generic "[501] 강재절단" [ref=e215]:
+                - generic [ref=e216]: "501"
+                - text: 강재절단
+              - generic "[501] 강재절단 2026-09-03 ~ 2026-09-16 진척 100% · 완료" [ref=e218]
+            - generic [ref=e220] [cursor=pointer]:
+              - generic "[501] 소조립" [ref=e221]:
+                - generic [ref=e222]: "501"
+                - text: 소조립
+              - generic "[501] 소조립 2026-09-17 ~ 2026-10-06 진척 100% · 완료" [ref=e224]
+            - generic [ref=e226] [cursor=pointer]:
+              - generic "[501] 대조립" [ref=e227]:
+                - generic [ref=e228]: "501"
+                - text: 대조립
+              - generic "[501] 대조립 2026-10-07 ~ 2026-11-03 진척 45% · 진행" [ref=e230]
+            - generic [ref=e232] [cursor=pointer]:
+              - generic "[501] 도장" [ref=e233]:
+                - generic [ref=e234]: "501"
+                - text: 도장
+              - generic "[501] 도장 2026-11-04 ~ 2026-11-19 진척 0% · 계획" [ref=e236]
+            - generic [ref=e237] [cursor=pointer]:
+              - generic "[501] 탑재" [ref=e238]:
+                - generic [ref=e239]: "501"
+                - text: 탑재
+              - generic "[501] 탑재 2026-11-20 ~ 2026-12-31 진척 0% · 계획" [ref=e241]
+            - generic [ref=e242] [cursor=pointer]:
+              - generic "[호선] 진수" [ref=e243]:
+                - generic [ref=e244]: 호선
+                - text: 진수
+              - generic "[호선] 진수 2027-02-10 ~ 2027-02-12 진척 0% · 계획" [ref=e246]
+            - generic [ref=e247] [cursor=pointer]:
+              - generic "[호선] 시운전" [ref=e248]:
+                - generic [ref=e249]: 호선
+                - text: 시운전
+              - generic "[호선] 시운전 2027-02-15 ~ 2027-03-20 진척 0% · 계획" [ref=e251]
+            - generic: 오늘
+        - paragraph [ref=e252]: 막대 또는 좌측 공정명을 클릭하면 상세/수정 패널이 열립니다.

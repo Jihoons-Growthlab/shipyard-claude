@@ -1,0 +1,179 @@
+- generic [ref=e13]:
+  - banner [ref=e14]:
+    - generic [ref=e15]: SWP Shipyard
+    - generic [ref=e16]:
+      - combobox "지역 선택" [ref=e17]:
+        - option "울산" [selected]
+        - option "거제"
+        - option "목포"
+      - generic [ref=e18]: ☀️
+      - generic [ref=e19]: 17.6℃
+      - generic [ref=e20]: 맑음
+      - generic [ref=e21]: 습도 52% · 바람 3.2m/s
+      - generic "실시간 조회 실패(날씨 공급자 미설정) — 화면 확인용 샘플값" [ref=e22]: 샘플
+    - generic [ref=e23]:
+      - generic [ref=e24]: 박공정 님
+      - generic [ref=e25]: 공정관리자 · 2026-10-19
+    - button "로그아웃" [ref=e26] [cursor=pointer]
+  - generic [ref=e27]:
+    - navigation [ref=e28]:
+      - generic [ref=e29]: MENU
+      - list [ref=e30]:
+        - listitem [ref=e31]:
+          - generic [ref=e32] [cursor=pointer]: 대시보드
+        - listitem [ref=e33]:
+          - generic [ref=e34] [cursor=pointer]: ▾ 호선관리
+          - list [ref=e35]:
+            - listitem [ref=e36]:
+              - generic [ref=e37] [cursor=pointer]: 호선 목록
+        - listitem [ref=e38]:
+          - generic [ref=e39] [cursor=pointer]: ▾ 공정관리
+          - list [ref=e40]:
+            - listitem [ref=e41]:
+              - generic [ref=e42] [cursor=pointer]: 공정 계획
+            - listitem [ref=e43]:
+              - generic [ref=e44] [cursor=pointer]: 공정 실적
+        - listitem [ref=e45]:
+          - generic [ref=e46] [cursor=pointer]: ▾ 도면관리
+          - list [ref=e47]:
+            - listitem [ref=e48]:
+              - generic [ref=e49] [cursor=pointer]: 도면 목록
+    - main [ref=e50]:
+      - tablist [ref=e51]:
+        - tab "대시보드 탭 닫기" [ref=e52] [cursor=pointer]:
+          - generic [ref=e53]: 대시보드
+          - button "탭 닫기" [ref=e54]: ×
+      - generic [ref=e56]:
+        - heading "대시보드 기준일 2026-10-19 · 호선/공정/도면 현황" [level=2] [ref=e57]
+        - generic [ref=e58]:
+          - generic [ref=e59] [cursor=pointer]:
+            - generic [ref=e60]: 진행 호선
+            - generic [ref=e61]: "4"
+          - generic [ref=e62] [cursor=pointer]:
+            - generic [ref=e63]: 지연 공정
+            - generic [ref=e64]: "1"
+          - generic [ref=e65] [cursor=pointer]:
+            - generic [ref=e66]: 도면 대기 공정
+            - generic [ref=e67]: "8"
+          - generic [ref=e68] [cursor=pointer]:
+            - generic [ref=e69]: 결재·배포 대기 도면
+            - generic [ref=e70]: "6"
+        - generic [ref=e71]:
+          - generic [ref=e72]:
+            - heading "호선별 진척률" [level=3] [ref=e73]
+            - generic [ref=e74] [cursor=pointer]:
+              - generic "SWP LNG 174K 1호" [ref=e75]: 8001 SWP LNG 174K 1호
+              - generic [ref=e78]: 65%
+            - generic [ref=e79] [cursor=pointer]:
+              - generic "Ocean Titan" [ref=e80]: 8002 Ocean Titan
+              - generic [ref=e83]: 17%
+            - generic [ref=e84] [cursor=pointer]:
+              - generic "Blue Horizon 15K" [ref=e85]: 8003 Blue Horizon 15K
+              - generic [ref=e87]: 0%
+            - generic [ref=e88] [cursor=pointer]:
+              - generic "Star Chemi" [ref=e89]: 8004 Star Chemi
+              - generic [ref=e91]: 0%
+            - generic [ref=e92] [cursor=pointer]:
+              - generic "Aurora LNG" [ref=e93]: 8005 Aurora LNG
+              - generic [ref=e96]: 94%
+          - generic [ref=e97]:
+            - heading "공정 상태 분포" [level=3] [ref=e98]
+            - generic [ref=e99]:
+              - img [ref=e100]:
+                - generic [ref=e105]: "83"
+                - generic [ref=e106]: 전체
+              - generic [ref=e107]:
+                - generic [ref=e108]: 계획 39
+                - generic [ref=e110]: 착수가능 0
+                - generic [ref=e112]: 진행 7
+                - generic [ref=e114]: 완료 36
+                - generic [ref=e116]: 지연 1
+          - generic [ref=e118]:
+            - heading "분야별 도면 상태" [level=3] [ref=e119]
+            - generic [ref=e120]:
+              - generic [ref=e121]: 선체 (17)
+              - generic [ref=e122]:
+                - generic "배포 11" [ref=e123]
+                - generic "승인 1" [ref=e124]
+                - generic "검토중 2" [ref=e125]
+                - generic "작성중 3" [ref=e126]
+            - generic [ref=e127]:
+              - generic [ref=e128]: 전장 (15)
+              - generic [ref=e129]:
+                - generic "배포 8" [ref=e130]
+                - generic "승인 1" [ref=e131]
+                - generic "검토중 2" [ref=e132]
+                - generic "작성중 4" [ref=e133]
+            - generic [ref=e134]:
+              - generic [ref=e135]: 배관 (15)
+              - generic [ref=e136]:
+                - generic "배포 11" [ref=e137]
+                - generic "작성중 4" [ref=e138]
+            - generic [ref=e139]:
+              - generic [ref=e140]: 배포
+              - generic [ref=e142]: 승인
+              - generic [ref=e144]: 검토중
+              - generic [ref=e146]: 작성중
+        - generic [ref=e148]:
+          - generic [ref=e149]:
+            - heading "월별 인도 예정" [level=3] [ref=e150]
+            - generic [ref=e151]:
+              - generic [ref=e152]:
+                - generic [ref=e153]: "1"
+                - generic [ref=e155]: 26-12
+                - generic [ref=e156]: "8005"
+              - generic [ref=e157]:
+                - generic [ref=e158]: "1"
+                - generic [ref=e160]: 27-06
+                - generic [ref=e161]: "8001"
+              - generic [ref=e162]:
+                - generic [ref=e163]: "1"
+                - generic [ref=e165]: 27-09
+                - generic [ref=e166]: "8002"
+              - generic [ref=e167]:
+                - generic [ref=e168]: "1"
+                - generic [ref=e170]: 28-03
+                - generic [ref=e171]: "8003"
+              - generic [ref=e172]:
+                - generic [ref=e173]: "1"
+                - generic [ref=e175]: 28-09
+                - generic [ref=e176]: "8004"
+          - generic [ref=e177]:
+            - heading "지연 공정 1" [level=3] [ref=e178]
+            - list [ref=e179]:
+              - listitem [ref=e180] [cursor=pointer]:
+                - generic [ref=e181]: 8001 [301] 도장
+                - generic [ref=e182]: 60% · 계획종료 2026-10-10
+          - generic [ref=e183]:
+            - heading "도면 대기 공정 8" [level=3] [ref=e184]
+            - list [ref=e185]:
+              - listitem [ref=e186] [cursor=pointer]:
+                - generic [ref=e187]: 8002 [401] 강재절단
+                - generic [ref=e188]: 착수 2026-10-31 · 8002-HULL-401
+              - listitem [ref=e189] [cursor=pointer]:
+                - generic [ref=e190]: 8002 [401] 대조립
+                - generic [ref=e191]: 착수 2026-12-04 · 8002-PIPE-401
+              - listitem [ref=e192] [cursor=pointer]:
+                - generic [ref=e193]: 8003 [101] 강재절단
+                - generic [ref=e194]: 착수 2027-01-10 · 8003-HULL-101
+              - listitem [ref=e195] [cursor=pointer]:
+                - generic [ref=e196]: 8003 [201] 강재절단
+                - generic [ref=e197]: 착수 2027-01-30 · 8003-HULL-201
+              - listitem [ref=e198] [cursor=pointer]:
+                - generic [ref=e199]: 8003 [101] 대조립
+                - generic [ref=e200]: 착수 2027-02-13 · 8003-PIPE-101
+              - listitem [ref=e201] [cursor=pointer]:
+                - generic [ref=e202]: 8003 [301] 강재절단
+                - generic [ref=e203]: 착수 2027-02-19 · 8003-HULL-301
+        - generic [ref=e204]:
+          - heading "도면 개정 영향 공정 3" [level=3] [ref=e205]
+          - list [ref=e206]:
+            - listitem [ref=e207] [cursor=pointer]:
+              - generic [ref=e208]: 8001-HULL-201 Rev2 → [201] 강재절단 [완료]
+              - generic [ref=e209]: 하중조건 변경에 따른 보강재 추가 · 배포 2026-10-12
+            - listitem [ref=e210] [cursor=pointer]:
+              - generic [ref=e211]: 8001-PIPE-501 Rev2 → [501] 대조립 [진행]
+              - generic [ref=e212]: 현장 요청 사항 반영 · 배포 2026-09-25
+            - listitem [ref=e213] [cursor=pointer]:
+              - generic [ref=e214]: 8002-PIPE-101 Rev2 → [101] 대조립 [진행]
+              - generic [ref=e215]: 현장 요청 사항 반영 · 배포 2026-09-23

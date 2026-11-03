@@ -1,0 +1,125 @@
+- generic [ref=e13]:
+  - banner [ref=e14]:
+    - generic [ref=e15]: SWP Shipyard
+    - generic [ref=e16]:
+      - generic [ref=e17]: 박공정 님
+      - generic [ref=e18]: 공정관리자 · 2026-10-19
+    - button "로그아웃" [ref=e19] [cursor=pointer]
+  - generic [ref=e20]:
+    - navigation [ref=e21]:
+      - generic [ref=e22]: MENU
+      - list [ref=e23]:
+        - listitem [ref=e24]:
+          - generic [ref=e25] [cursor=pointer]: 대시보드
+        - listitem [ref=e26]:
+          - generic [ref=e27] [cursor=pointer]: ▾ 호선관리
+          - list [ref=e28]:
+            - listitem [ref=e29]:
+              - generic [ref=e30] [cursor=pointer]: 호선 목록
+        - listitem [ref=e31]:
+          - generic [ref=e32] [cursor=pointer]: ▾ 공정관리
+          - list [ref=e33]:
+            - listitem [ref=e34]:
+              - generic [ref=e35] [cursor=pointer]: 공정 계획
+            - listitem [ref=e36]:
+              - generic [ref=e37] [cursor=pointer]: 공정 실적
+        - listitem [ref=e38]:
+          - generic [ref=e39] [cursor=pointer]: ▾ 도면관리
+          - list [ref=e40]:
+            - listitem [ref=e41]:
+              - generic [ref=e42] [cursor=pointer]: 도면 목록
+    - main [ref=e43]:
+      - tablist [ref=e44]:
+        - tab "대시보드 탭 닫기" [ref=e45] [cursor=pointer]:
+          - generic [ref=e46]: 대시보드
+          - button "탭 닫기" [ref=e47]: ×
+        - tab "공정 계획 탭 닫기" [ref=e54] [cursor=pointer]:
+          - generic [ref=e55]: 공정 계획
+          - button "탭 닫기" [ref=e56]: ×
+        - button "다른 탭 닫기" [ref=e57] [cursor=pointer]
+      - generic [ref=e58]:
+        - heading "공정 계획" [level=2] [ref=e60]
+        - generic [ref=e61]:
+          - combobox [ref=e62]:
+            - option "8001 SWP LNG 174K 1호"
+            - option "8002 Ocean Titan"
+            - option "8003 Blue Horizon 15K"
+            - option "8004 Star Chemi" [selected]
+            - option "8005 Aurora LNG"
+          - combobox [ref=e63]:
+            - option "블록 전체" [selected]
+            - option "101 선수부 블록"
+            - option "201 중앙부 블록"
+          - combobox [ref=e64]:
+            - option "축소"
+            - option "보통" [selected]
+            - option "확대"
+          - generic [ref=e65]: 호선 진척 0%
+          - button "+ 공정 추가" [active] [ref=e66] [cursor=pointer]
+        - generic [ref=e67]:
+          - generic [ref=e68]: 계획
+          - generic [ref=e70]: 착수가능
+          - generic [ref=e72]: 진행
+          - generic [ref=e74]: 완료
+          - generic [ref=e76]: 지연
+          - generic [ref=e78]: 📐 도면 대기
+          - generic [ref=e79]: — 선후행 연결선 / 빨간선 = 오늘(2026-10-19)
+        - generic [ref=e279]:
+          - generic [ref=e280]:
+            - generic [ref=e281]: 블록 / 공정
+            - generic [ref=e282]:
+              - generic [ref=e283]: "2026.10"
+              - generic [ref=e284]: "2026.11"
+          - generic [ref=e285]:
+            - generic [ref=e286] [cursor=pointer]:
+              - generic "[101] 강재절단" [ref=e287]:
+                - generic [ref=e288]: "101"
+                - text: 강재절단 📐
+              - generic "[101] 강재절단 2026-10-19 ~ 2026-11-01 진척 0% · 계획 도면 대기" [ref=e335]
+            - generic: 오늘
+        - generic [ref=e344]:
+          - generic [ref=e345]: 공정 추가
+          - generic [ref=e347]:
+            - generic [ref=e348]:
+              - generic [ref=e349]:
+                - text: 블록
+                - combobox "블록" [ref=e350]:
+                  - option "호선 전체(블록 없음)" [selected]
+                  - option "101 선수부 블록"
+                  - option "201 중앙부 블록"
+              - generic [ref=e351]:
+                - text: 공정
+                - combobox "공정" [ref=e352]:
+                  - option "강재절단" [selected]
+                  - option "소조립"
+                  - option "대조립"
+                  - option "도장"
+                  - option "탑재"
+                  - option "진수"
+                  - option "시운전"
+              - generic [ref=e353]:
+                - text: 담당자
+                - combobox "담당자" [ref=e354]:
+                  - option "미지정" [selected]
+                  - option "김관리"
+                  - option "박공정"
+                  - option "이도면"
+                  - option "최품질"
+                  - option "한현장"
+              - generic [ref=e355]:
+                - text: 계획 시작
+                - textbox "계획 시작" [ref=e356]: 2026-10-19
+              - generic [ref=e357]:
+                - text: 계획 종료
+                - textbox "계획 종료" [ref=e358]: 2026-11-01
+              - generic [ref=e359]:
+                - text: 선행 공정 (Ctrl 다중선택)
+                - listbox "선행 공정 (Ctrl 다중선택)" [ref=e360]:
+                  - option "[101] 강재절단" [ref=e361]
+              - generic [ref=e362]:
+                - text: 비고
+                - textbox "비고" [ref=e363]
+              - generic [ref=e364]:
+                - button "저장" [ref=e365] [cursor=pointer]
+                - button "닫기" [ref=e366] [cursor=pointer]
+            - paragraph [ref=e368]: 저장한 뒤 이 공정에 도면을 연계할 수 있습니다.

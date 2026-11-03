@@ -1,0 +1,10 @@
+- generic [ref=e4]:
+  - heading "SWP Shipyard" [level=1] [ref=e5]
+  - generic [ref=e6]:
+    - text: 아이디
+    - textbox "아이디" [ref=e7]: park.pm
+  - generic [ref=e8]:
+    - text: 비밀번호
+    - textbox "비밀번호" [ref=e9]: pm1234
+  - button "로그인" [ref=e11] [cursor=pointer]
+  - generic [ref=e12] [cursor=pointer]: 회원가입

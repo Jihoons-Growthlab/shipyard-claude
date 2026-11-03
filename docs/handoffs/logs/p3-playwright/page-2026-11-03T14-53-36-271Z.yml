@@ -1,0 +1,40 @@
+- generic [ref=e13]:
+  - banner [ref=e14]:
+    - generic [ref=e15]: SWP Shipyard
+    - generic [ref=e16]:
+      - generic [ref=e17]: 박공정 님
+      - generic [ref=e18]: 공정관리자 · 2026-10-19
+    - button "로그아웃" [ref=e19] [cursor=pointer]
+  - generic [ref=e20]:
+    - navigation [ref=e21]:
+      - generic [ref=e22]: MENU
+      - list [ref=e23]:
+        - listitem [ref=e24]:
+          - generic [ref=e25] [cursor=pointer]: 대시보드
+        - listitem [ref=e26]:
+          - generic [ref=e27] [cursor=pointer]: ▾ 호선관리
+          - list [ref=e28]:
+            - listitem [ref=e29]:
+              - generic [ref=e30] [cursor=pointer]: 호선 목록
+        - listitem [ref=e31]:
+          - generic [ref=e32] [cursor=pointer]: ▾ 공정관리
+          - list [ref=e33]:
+            - listitem [ref=e34]:
+              - generic [ref=e35] [cursor=pointer]: 공정 계획
+            - listitem [ref=e36]:
+              - generic [ref=e37] [cursor=pointer]: 공정 실적
+        - listitem [ref=e38]:
+          - generic [ref=e39] [cursor=pointer]: ▾ 도면관리
+          - list [ref=e40]:
+            - listitem [ref=e41]:
+              - generic [ref=e42] [cursor=pointer]: 도면 목록
+    - main [ref=e43]:
+      - tablist [ref=e44]:
+        - tab "대시보드 탭 닫기" [ref=e45] [cursor=pointer]:
+          - generic [ref=e46]: 대시보드
+          - button "탭 닫기" [ref=e47]: ×
+      - generic [ref=e49]:
+        - generic [ref=e50]:
+          - heading "대시보드" [level=2] [ref=e51]
+          - generic [ref=e52]: 조회 전용
+        - paragraph [ref=e53]: 이 화면은 F03 단계에서 구현됩니다.

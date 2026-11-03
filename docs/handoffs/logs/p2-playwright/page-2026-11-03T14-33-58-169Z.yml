@@ -1,0 +1,219 @@
+- generic [ref=e2]:
+  - generic [ref=e13]:
+    - banner [ref=e14]:
+      - generic [ref=e15]: SWP Shipyard
+      - generic [ref=e16]:
+        - generic [ref=e17]: 박공정 님
+        - generic [ref=e18]: 공정관리자 · 2026-10-19
+      - button "로그아웃" [ref=e19] [cursor=pointer]
+    - generic [ref=e20]:
+      - navigation [ref=e21]:
+        - generic [ref=e22]: MENU
+        - list [ref=e23]:
+          - listitem [ref=e24]:
+            - generic [ref=e25] [cursor=pointer]: 대시보드
+          - listitem [ref=e26]:
+            - generic [ref=e27] [cursor=pointer]: ▾ 호선관리
+            - list [ref=e28]:
+              - listitem [ref=e29]:
+                - generic [ref=e30] [cursor=pointer]: 호선 목록
+          - listitem [ref=e31]:
+            - generic [ref=e32] [cursor=pointer]: ▾ 공정관리
+            - list [ref=e33]:
+              - listitem [ref=e34]:
+                - generic [ref=e35] [cursor=pointer]: 공정 계획
+              - listitem [ref=e36]:
+                - generic [ref=e37] [cursor=pointer]: 공정 실적
+          - listitem [ref=e38]:
+            - generic [ref=e39] [cursor=pointer]: ▾ 도면관리
+            - list [ref=e40]:
+              - listitem [ref=e41]:
+                - generic [ref=e42] [cursor=pointer]: 도면 목록
+      - main [ref=e43]:
+        - tablist [ref=e44]:
+          - tab "대시보드 탭 닫기" [ref=e45] [cursor=pointer]:
+            - generic [ref=e46]: 대시보드
+            - button "탭 닫기" [ref=e47]: ×
+          - tab "호선 목록 탭 닫기" [ref=e54] [cursor=pointer]:
+            - generic [ref=e55]: 호선 목록
+            - button "탭 닫기" [ref=e56]: ×
+          - button "다른 탭 닫기" [ref=e57] [cursor=pointer]
+        - generic [ref=e58]:
+          - heading "호선 목록" [level=2] [ref=e60]
+          - paragraph [ref=e61]: 행을 더블클릭하거나 [상세]를 누르면 호선 상세 팝업이 열립니다.
+          - generic [ref=e62]:
+            - combobox [ref=e63]:
+              - option "상태 전체" [selected]
+              - option "계획"
+              - option "설계"
+              - option "건조"
+              - option "진수"
+              - option "시운전"
+              - option "인도"
+            - combobox [ref=e64]:
+              - option "선종 전체" [selected]
+              - option "LNG운반선"
+              - option "원유운반선"
+              - option "컨테이너선"
+              - option "PC선"
+            - textbox "호선번호/호선명/선주" [ref=e65]
+            - button "조회" [ref=e66] [cursor=pointer]
+            - button "초기화" [ref=e67] [cursor=pointer]
+            - button "+ 호선 등록" [ref=e68] [cursor=pointer]
+          - table [ref=e69]:
+            - rowgroup [ref=e70]:
+              - row [ref=e71]:
+                - columnheader "호선번호" [ref=e72]
+                - columnheader "호선명" [ref=e73]
+                - columnheader "선종" [ref=e74]
+                - columnheader "상태" [ref=e75]
+                - columnheader "선주" [ref=e76]
+                - columnheader "선급" [ref=e77]
+                - columnheader "도크" [ref=e78]
+                - columnheader "계약일" [ref=e79]
+                - columnheader "인도예정" [ref=e80]
+                - columnheader "진척률" [ref=e81]
+                - columnheader "지연" [ref=e82]
+                - columnheader [ref=e83]
+            - rowgroup [ref=e84]:
+              - row [ref=e85]:
+                - cell "8001" [ref=e86]
+                - cell "SWP LNG 174K 1호" [ref=e87]
+                - cell "LNG운반선" [ref=e88]
+                - cell "건조" [ref=e89]
+                - cell "Nordic Gas Shipping" [ref=e90]
+                - cell "DNV" [ref=e91]
+                - cell "1도크" [ref=e92]
+                - cell "2025-03-10" [ref=e93]
+                - cell "2027-06-30" [ref=e94]
+                - cell "계획 없음" [ref=e95]
+                - cell "-" [ref=e96]
+                - cell [ref=e97]:
+                  - button "상세" [ref=e98] [cursor=pointer]
+              - row [ref=e99]:
+                - cell "8002" [ref=e100]
+                - cell "Ocean Titan" [ref=e101]
+                - cell "원유운반선" [ref=e102]
+                - cell "건조" [ref=e103]
+                - cell "Pacific Tankers" [ref=e104]
+                - cell "LR" [ref=e105]
+                - cell "2도크" [ref=e106]
+                - cell "2025-06-20" [ref=e107]
+                - cell "2027-09-30" [ref=e108]
+                - cell "계획 없음" [ref=e109]
+                - cell "-" [ref=e110]
+                - cell [ref=e111]:
+                  - button "상세" [ref=e112] [cursor=pointer]
+              - row [ref=e113]:
+                - cell "8003" [ref=e114]
+                - cell "Blue Horizon 15K" [ref=e115]
+                - cell "컨테이너선" [ref=e116]
+                - cell "설계" [ref=e117]
+                - cell "Asia Container Line" [ref=e118]
+                - cell "KR" [ref=e119]
+                - cell "3도크" [ref=e120]
+                - cell "2026-04-15" [ref=e121]
+                - cell "2028-03-31" [ref=e122]
+                - cell "계획 없음" [ref=e123]
+                - cell "-" [ref=e124]
+                - cell [ref=e125]:
+                  - button "상세" [ref=e126] [cursor=pointer]
+              - row [ref=e127]:
+                - cell "8004" [ref=e128]
+                - cell "Star Chemi" [ref=e129]
+                - cell "PC선" [ref=e130]
+                - cell "계획" [ref=e131]
+                - cell "Helios Marine" [ref=e132]
+                - cell "ABS" [ref=e133]
+                - cell "-" [ref=e134]
+                - cell "2026-09-01" [ref=e135]
+                - cell "2028-09-30" [ref=e136]
+                - cell "계획 없음" [ref=e137]
+                - cell "-" [ref=e138]
+                - cell [ref=e139]:
+                  - button "상세" [ref=e140] [cursor=pointer]
+              - row [ref=e141]:
+                - cell "8005" [ref=e142]
+                - cell "Aurora LNG" [ref=e143]
+                - cell "LNG운반선" [ref=e144]
+                - cell "시운전" [ref=e145]
+                - cell "Nordic Gas Shipping" [ref=e146]
+                - cell "DNV" [ref=e147]
+                - cell "1도크" [ref=e148]
+                - cell "2024-09-12" [ref=e149]
+                - cell "2026-12-15" [ref=e150]
+                - cell "계획 없음" [ref=e151]
+                - cell "-" [ref=e152]
+                - cell [ref=e153]:
+                  - button "상세" [ref=e154] [cursor=pointer]
+              - row [ref=e198]:
+                - cell "9001" [ref=e199]
+                - cell "PW Test Ship" [ref=e200]
+                - cell "LNG운반선" [ref=e201]
+                - cell "계획" [ref=e202]
+                - cell [ref=e203]
+                - cell [ref=e204]
+                - cell "-" [ref=e205]
+                - cell "2026-01-01" [ref=e206]
+                - cell "2027-12-31" [ref=e207]
+                - cell "계획 없음" [ref=e208]
+                - cell "-" [ref=e209]
+                - cell [ref=e210]:
+                  - button "상세" [ref=e211] [cursor=pointer]
+          - generic [ref=e155]: 총 6척
+          - dialog "호선 9001 · PW Test Ship" [ref=e212]:
+            - generic [ref=e158]:
+              - heading "호선 9001 · PW Test Ship" [level=3] [ref=e213]
+              - button "닫기" [ref=e160] [cursor=pointer]: ✕
+            - generic [ref=e161]:
+              - generic [ref=e214]:
+                - generic [ref=e215] [cursor=pointer]: 기본정보
+                - generic [ref=e216] [cursor=pointer]: 주요일정
+                - generic [ref=e217] [cursor=pointer]: 블록 구성
+                - generic [ref=e218] [cursor=pointer]: 연계 현황
+              - generic [ref=e221]:
+                - table [ref=e222]:
+                  - rowgroup [ref=e223]:
+                    - row [ref=e224]:
+                      - columnheader "일정" [ref=e225]
+                      - columnheader "계획일" [ref=e226]
+                      - columnheader "실적일" [ref=e227]
+                      - columnheader "차이(일)" [ref=e228]
+                  - rowgroup [ref=e229]:
+                    - row [ref=e230]:
+                      - cell "강재절단" [ref=e231]
+                      - cell [ref=e232]:
+                        - textbox [ref=e233]
+                      - cell [ref=e234]:
+                        - textbox [ref=e235]
+                      - cell "-" [ref=e236]
+                    - row [ref=e237]:
+                      - cell "기공(Keel Laying)" [ref=e238]
+                      - cell [ref=e239]:
+                        - textbox [ref=e240]
+                      - cell [ref=e241]:
+                        - textbox [ref=e242]
+                      - cell "-" [ref=e243]
+                    - row [ref=e244]:
+                      - cell "진수" [ref=e245]
+                      - cell [ref=e246]:
+                        - textbox [ref=e247]
+                      - cell [ref=e248]:
+                        - textbox [ref=e249]
+                      - cell "-" [ref=e250]
+                    - row [ref=e251]:
+                      - cell "시운전" [ref=e252]
+                      - cell [ref=e253]:
+                        - textbox [ref=e254]
+                      - cell [ref=e255]:
+                        - textbox [ref=e256]
+                      - cell "-" [ref=e257]
+                    - row [ref=e258]:
+                      - cell "인도" [ref=e259]
+                      - cell [ref=e260]:
+                        - textbox [ref=e261]: 2027-12-31
+                      - cell [ref=e262]:
+                        - textbox [ref=e263]
+                      - cell "-" [ref=e264]
+                - button "일정 저장" [ref=e265] [cursor=pointer]
+  - status [ref=e220]: 호선이 등록되었습니다.

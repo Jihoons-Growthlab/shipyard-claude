@@ -1,0 +1,18 @@
+# Phase 0 — SQLite MCP 진단 (2026-11-03)
+
+증상: Claude Code 세션 시작 시 sqlite: "CONNECTION_CLOSED: Connection closed" (claude mcp list: ✘ Failed to connect)
+
+1) 읽기 전용 확인
+- uvx 0.13.7, 캐시에 db-mcp-server 1.2.1 존재 (다운로드 불필요)
+- 패키지 config.py 환경변수(DB_TYPE/DB_PATH/DB_MODE)와 .mcp.json 설정 일치 → 설정 오류 아님
+- database/shipyard.db 0바이트 (원인 아님, 아래 3에서 연결 성공)
+
+2) 원인 (검증됨) — `uvx --offline db-mcp-server` 직접 실행 시 stderr:
+  ModuleNotFoundError: No module named 'mcp.server.fastmcp'. This is mcp 2.x, where FastMCP was renamed to MCPServer ...
+  → db-mcp-server 1.2.1이 mcp SDK 버전을 고정하지 않아 uvx가 mcp 2.x를 설치, import 단계에서 즉시 종료.
+
+3) 해결 (사용자 승인 후 적용)
+- .mcp.json args: ["db-mcp-server"] → ["--with","mcp<2","db-mcp-server"]
+- initialize 스모크 테스트: serverInfo {"name":"db-mcp-server (sqlite:shipyard.db)","version":"1.30.0"}, "[db-mcp] SQLite connected."
+- claude mcp list: sqlite ✔ Connected
+- 남은 작업: 현재 세션은 시작 시 실패 상태 유지 → 사용자가 /mcp 재연결 후 SELECT name FROM sqlite_master 1회 증빙 (P1 마이그레이션 이후 의미 있음)

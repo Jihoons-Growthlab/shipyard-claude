@@ -1,0 +1,3 @@
+[     450ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:5173/favicon.ico:0
+[    3254ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:5173/api/hulls:0
+[   32305ms] [ERROR] Failed to load resource: the server responded with a status of 409 (Conflict) @ http://localhost:5173/api/hulls/9001/blocks:0
