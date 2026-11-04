@@ -16,7 +16,7 @@ const props = defineProps({
   users: { type: Array, required: true },
   canWrite: Boolean,
 })
-const emit = defineEmits(['saved', 'deleted', 'close'])
+const emit = defineEmits(['saved', 'deleted', 'close', 'open-drawing'])
 const isNew = computed(() => !props.plan)
 const f = reactive({})
 const dw = ref(null)
@@ -79,19 +79,19 @@ defineExpose({ loadDrawings })
   <div class="pp" data-test="plan-panel">
     <div class="pp-h">
       <b>{{ isNew ? '공정 추가' : plan.label }}</b>
-      <span v-if="!isNew" :class="['st', 'c-' + plan.plan_status.toLowerCase()]">{{ codeName('PLANSTAT', plan.plan_status) }}</span>
+      <span v-if="!isNew" :class="['bdg', 's-' + plan.plan_status.toLowerCase()]">{{ codeName('PLANSTAT', plan.plan_status) }}</span>
       <span v-if="!isNew" class="muted">진척 {{ plan.progress_rate }}% · 실제 {{ plan.actual_start_dt || '-' }} ~ {{ plan.actual_end_dt || '-' }}</span>
     </div>
     <div class="pp-body">
-      <form class="grid4" data-test="plan-form" @submit.prevent="save">
+      <form class="grid g6" data-test="plan-form" @submit.prevent="save">
         <label class="span2">블록<select v-model="f.block_id" name="block_id"><option :value="null">호선 전체(블록 없음)</option><option v-for="b in blocks" :key="b.block_id" :value="b.block_id">{{ b.block_cd }} {{ b.block_nm }}</option></select></label>
-        <label>공정<select v-model="f.proc_cd" name="proc_cd"><option v-for="p in procs" :key="p.proc_cd" :value="p.proc_cd">{{ p.proc_nm }}</option></select></label>
-        <label>담당자<select v-model="f.manager_emp_no" name="manager_emp_no"><option value="">미지정</option><option v-for="u in users" :key="u.emp_no" :value="u.emp_no">{{ u.display_name }}</option></select></label>
+        <label class="w2">공정<select v-model="f.proc_cd" name="proc_cd"><option v-for="p in procs" :key="p.proc_cd" :value="p.proc_cd">{{ p.proc_nm }}</option></select></label>
         <label>계획 시작<input v-model="f.plan_start_dt" name="plan_start_dt" type="date" /></label>
         <label>계획 종료<input v-model="f.plan_end_dt" name="plan_end_dt" type="date" /></label>
-        <label class="span2">선행 공정 (Ctrl 다중선택)<select v-model="f.pred_plan_ids" name="preds" multiple size="4"><option v-for="x in predOptions" :key="x.plan_id" :value="x.plan_id">{{ x.label }}</option></select></label>
-        <label class="span4">비고<textarea v-model="f.remark" name="remark" rows="2" /></label>
-        <div class="span4 bar">
+        <label class="w2">담당자<select v-model="f.manager_emp_no" name="manager_emp_no"><option value="">미지정</option><option v-for="u in users" :key="u.emp_no" :value="u.emp_no">{{ u.display_name }} ({{ u.emp_no }})</option></select></label>
+        <label class="span3">선행 공정 (Ctrl 다중선택)<select v-model="f.pred_plan_ids" name="preds" multiple size="3"><option v-for="x in predOptions" :key="x.plan_id" :value="x.plan_id">{{ x.label }}</option></select></label>
+        <label class="span3">비고<textarea v-model="f.remark" name="remark" /></label>
+        <div class="span6 bar">
           <button class="btn pri" data-test="plan-save" :disabled="!canWrite">저장</button>
           <button v-if="!isNew" class="btn dng" type="button" data-test="plan-delete" :disabled="!canWrite" @click="remove">삭제</button>
           <button class="btn" type="button" data-test="plan-close" @click="emit('close')">닫기</button>
@@ -104,18 +104,18 @@ defineExpose({ loadDrawings })
             📐 도면 대기: 필수 도면 <b>{{ dw.blockers.map((d) => `${d.drawing_no}(${codeName('DWGSTAT', d.dwg_status)})`).join(', ') }}</b> 미배포 → 착수 불가
           </div>
           <h4>연계 도면 <span class="muted">(필수 도면은 배포 전 착수 불가)</span></h4>
-          <table class="tbl">
+          <div class="tw r3"><table class="tbl">
             <thead><tr><th>도면번호</th><th>상태</th><th>필수</th><th></th></tr></thead>
             <tbody>
               <tr v-for="d in dw.links" :key="d.drawing_id" :data-link="d.drawing_no" :title="`${d.drawing_nm} · 필요일 ${d.need_dt || '-'}`">
-                <td>{{ d.drawing_no }}</td>
-                <td>{{ codeName('DWGSTAT', d.dwg_status) }}<span v-if="!d.has_issued" class="badge warn">미배포</span></td>
+                <td><a class="lnk" href="#" data-test="open-drawing" @click.prevent="emit('open-drawing', d.drawing_id)">{{ d.drawing_no }}</a></td>
+                <td><span :class="['bdg', 'd-' + d.dwg_status.toLowerCase()]">{{ codeName('DWGSTAT', d.dwg_status) }}</span><span v-if="!d.has_issued" class="bdg b-warn"> 미배포</span></td>
                 <td>{{ d.required ? '필수' : '참고' }}</td>
-                <td><button class="btn sm" :disabled="!canWrite" data-test="unlink" @click="unlink(d)">해제</button></td>
+                <td><button class="btn sm dng" :disabled="!canWrite" data-test="unlink" @click="unlink(d)">해제</button></td>
               </tr>
               <tr v-if="!dw.links.length"><td colspan="4" class="muted">연계된 도면이 없습니다.</td></tr>
             </tbody>
-          </table>
+          </table></div>
           <form class="bar" data-test="link-form" @submit.prevent="addLink">
             <select v-model="link.drawing_id" name="drawing_id"><option value="">도면 선택</option><option v-for="d in dw.available" :key="d.drawing_id" :value="d.drawing_id">{{ d.drawing_no }} {{ d.drawing_nm }}</option></select>
             <label><input v-model="link.required" type="checkbox" name="required" /> 필수</label>

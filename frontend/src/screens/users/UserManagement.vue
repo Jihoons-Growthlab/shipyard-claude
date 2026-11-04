@@ -63,15 +63,16 @@ onMounted(async () => {
 
 <template>
   <section class="screen split">
+    <div class="ph"><h2>{{ menu.title }}</h2><span class="d">상단 목록 / 하단 입력·수정 (CRUD)</span></div>
     <div class="top-p">
       <div class="bar">
         <select v-model="filter.status" name="status"><option value="">상태 전체</option><option v-for="(n, k) in STATUS" :key="k" :value="k">{{ n }}</option></select>
         <input v-model="filter.q" name="q" placeholder="아이디/이름/이메일/전화" @keyup.enter="search">
         <button class="btn pri" data-test="search" @click="search">조회</button>
         <button class="btn" data-test="reset" @click="reset">초기화</button>
-        <span class="note" data-test="counts">{{ list.total }}명 · 승인대기 {{ list.pending }}명</span>
+        <span class="note right" data-test="counts">{{ list.total }}명 · 승인대기 {{ list.pending }}명</span>
       </div>
-      <table class="tbl" data-test="users">
+      <div class="tw"><table class="tbl" data-test="users">
         <thead><tr><th>아이디</th><th>이름</th><th>이메일</th><th>전화번호</th><th>생년월일</th><th>상태</th><th>2차인증</th><th>권한그룹</th><th>가입일</th></tr></thead>
         <tbody>
           <tr v-for="u in list.users" :key="u.emp_no" :data-id="u.emp_no" :class="{ sel: sel === u.emp_no }" @click="pick(u)">
@@ -80,7 +81,7 @@ onMounted(async () => {
             <td>{{ u.totp_enabled ? '사용' : '-' }}</td><td>{{ u.groups.map((g) => g.name).join(', ') || '-' }}</td><td>{{ u.created_at }}</td>
           </tr>
         </tbody>
-      </table>
+      </table></div>
     </div>
 
     <div class="bot-p card">
@@ -95,7 +96,7 @@ onMounted(async () => {
         <label>{{ sel === 'new' ? '비밀번호 *' : '비밀번호 (변경 시만 입력)' }}<input v-model="f.password" name="password" type="password" autocomplete="new-password" placeholder="8자 이상"></label>
         <label>상태<select v-model="f.status" name="ustatus"><option v-for="(n, k) in STATUS" :key="k" :value="k">{{ n }}</option></select></label>
         <label>권한 그룹<select v-model="f.group" name="group"><option value="">없음</option><option v-for="g in groups" :key="g.code" :value="g.code">{{ g.name }}</option></select></label>
-        <label>2차인증<span><input v-model="f.totp_enabled" name="totp" type="checkbox"> 사용 (등록된 사용자만)</span></label>
+        <label>구글 2차인증<span class="ck"><input v-model="f.totp_enabled" name="totp" type="checkbox"> 사용 (등록된 사용자만)</span></label>
         <label>가입일<input :value="f.created_at || '-'" readonly></label>
       </form>
       <div v-else class="empty">목록에서 회원을 선택하거나 [신규]를 누르세요.</div>

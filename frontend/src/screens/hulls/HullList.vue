@@ -4,6 +4,7 @@ import { onMounted, reactive, ref } from 'vue'
 import { api } from '../../api/client'
 import { codeList, codeName, loadCodes } from '../../stores/codes'
 import { toast } from '../../stores/toast'
+import ProgressBar from '../../components/ProgressBar.vue'
 import HullDetailModal from './HullDetailModal.vue'
 
 const props = defineProps({ menu: { type: Object, required: true } })
@@ -27,9 +28,9 @@ defineExpose({ search })
   <section class="screen">
     <div class="ph">
       <h2>{{ menu.title }}</h2>
+      <span class="d">행을 더블클릭하거나 [상세]를 누르면 호선 상세 팝업이 열립니다.</span>
       <span v-if="!menu.can_write" class="badge ro" data-test="readonly">조회 전용</span>
     </div>
-    <p class="muted">행을 더블클릭하거나 [상세]를 누르면 호선 상세 팝업이 열립니다.</p>
     <form class="bar" @submit.prevent="search">
       <select v-model="f.status" name="status"><option value="">상태 전체</option><option v-for="c in codeList('HULLSTAT')" :key="c.code" :value="c.code">{{ c.name }}</option></select>
       <select v-model="f.ship_type" name="ship_type"><option value="">선종 전체</option><option v-for="c in codeList('SHIPTYPE')" :key="c.code" :value="c.code">{{ c.name }}</option></select>
@@ -44,15 +45,15 @@ defineExpose({ search })
         <tr v-for="h in rows" :key="h.hull_no" :class="{ sel: sel === h.hull_no }" :data-hull="h.hull_no"
             @click="sel = h.hull_no" @dblclick="detail = h.hull_no">
           <td><b>{{ h.hull_no }}</b></td><td>{{ h.hull_nm }}</td><td>{{ codeName('SHIPTYPE', h.ship_type) }}</td>
-          <td>{{ codeName('HULLSTAT', h.hull_status) }}</td><td>{{ h.owner_nm }}</td><td>{{ h.class_society }}</td>
+          <td><span class="bdg b-info">{{ codeName('HULLSTAT', h.hull_status) }}</span></td><td>{{ h.owner_nm }}</td><td>{{ h.class_society }}</td>
           <td>{{ h.dock_no || '-' }}</td><td>{{ h.contract_dt }}</td><td>{{ h.delivery_dt }}</td>
-          <td>{{ h.progress === null ? '계획 없음' : h.progress + '%' }}</td><td class="num">{{ h.delay_count || '-' }}</td>
+          <td style="min-width:120px"><span v-if="h.progress === null" class="muted">계획 없음</span><ProgressBar v-else :value="h.progress" /></td><td class="num">{{ h.delay_count || '-' }}</td>
           <td><button class="btn sm" data-test="open" @click.stop="detail = h.hull_no">상세</button></td>
         </tr>
         <tr v-if="!rows.length"><td colspan="12" class="muted">조회된 호선이 없습니다.</td></tr>
       </tbody>
     </table>
-    <div class="muted">총 {{ rows.length }}척</div>
+    <div class="note">총 {{ rows.length }}척</div>
     <HullDetailModal v-if="detail" :hull-no="detail" :can-write="menu.can_write"
                      @close="detail = null" @saved="onSaved" @deleted="onDeleted" @changed="search" />
   </section>

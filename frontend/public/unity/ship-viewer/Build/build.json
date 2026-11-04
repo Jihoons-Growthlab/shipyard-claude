@@ -1,0 +1,9 @@
+{
+    "loaderUrl": "ship-viewer.loader.js",
+    "dataUrl": "ship-viewer.data",
+    "frameworkUrl": "ship-viewer.framework.js",
+    "codeUrl": "ship-viewer.wasm",
+    "companyName": "SWP",
+    "productName": "ShipyardViewer",
+    "productVersion": "1.0"
+}

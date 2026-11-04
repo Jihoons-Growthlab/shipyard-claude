@@ -3,6 +3,8 @@
 import { computed, inject, reactive, ref, watch } from 'vue'
 import { api } from '../../api/client'
 import BaseModal from '../../components/BaseModal.vue'
+import ProgressBar from '../../components/ProgressBar.vue'
+import ShipViewer from '../../components/ShipViewer.vue'
 import { codeList, codeName } from '../../stores/codes'
 import { toast } from '../../stores/toast'
 
@@ -14,12 +16,13 @@ function goto(screen) { navigate(screen, props.hullNo); emit('close') }
 
 const isNew = computed(() => props.hullNo === 'new')
 const tab = ref('info')
+let loaded = null // data tab currently in the form; the 3D tab holds no data, so returning from it must not refetch over unsaved edits
 const form = reactive({})
 const ms = ref([])
 const blocks = ref([])
 const summary = ref(null)
 const blk = reactive({ block_cd: '', block_nm: '', block_type: '', weight_ton: '' })
-const title = computed(() => (isNew.value ? '호선 등록' : `호선 ${props.hullNo} · ${form.hull_nm || ''}`))
+const title = computed(() => (isNew.value ? '호선 등록' : `호선 ${props.hullNo}`))
 const FIELDS = ['hull_no', 'hull_nm', 'ship_type', 'hull_status', 'owner_nm', 'class_society', 'length_m', 'breadth_m',
   'depth_m', 'dead_weight', 'dock_no', 'contract_dt', 'delivery_dt', 'remark', 'use_yn']
 const NUMS = ['length_m', 'breadth_m', 'depth_m', 'dead_weight']
@@ -38,6 +41,7 @@ async function loadInfo() {
   form.use_yn = h.use_yn
 }
 async function loadTab() {
+  loaded = tab.value
   try {
     if (tab.value === 'info') await loadInfo()
     else if (tab.value === 'ms') ms.value = await api.milestones(props.hullNo)
@@ -47,7 +51,7 @@ async function loadTab() {
 }
 // HULL-T04: keep the current sub tab when the same popup reloads; new -> created hull switches to its detail
 watch(() => props.hullNo, (n, o) => { if (o === 'new' || !o) tab.value = 'info'; loadTab() }, { immediate: true })
-watch(tab, loadTab)
+watch(tab, (t) => { if (t !== '3d' && t !== loaded) loadTab() })
 
 function payload() {
   const b = {}
@@ -95,13 +99,14 @@ async function delBlock(b) {
 </script>
 
 <template>
-  <BaseModal open large :title="title" @close="emit('close')">
+  <BaseModal open :large="tab !== '3d'" :xl="tab === '3d'" :title="title" @close="emit('close')">
+    <p class="mnote">{{ isNew ? '신규 호선을 등록합니다.' : codeName('HULLSTAT', form.hull_status) }}</p>
     <div v-if="!isNew" class="stabs">
-      <a v-for="[k, n] in [['info', '기본정보'], ['ms', '주요일정'], ['blk', '블록 구성'], ['sum', '연계 현황']]" :key="k"
+      <a v-for="[k, n] in [['info', '기본정보'], ['ms', '주요일정'], ['blk', '블록 구성'], ['sum', '연계 현황'], ['3d', '3D 보기']]" :key="k"
          :class="{ act: tab === k }" :data-subtab="k" @click="tab = k">{{ n }}</a>
     </div>
 
-    <form v-if="tab === 'info'" class="grid4" data-test="hull-form" @submit.prevent="save">
+    <form v-if="tab === 'info'" class="card grid g4" data-test="hull-form" @submit.prevent="save">
       <label>호선번호 *<input v-model="form.hull_no" name="hull_no" :readonly="!isNew" /></label>
       <label class="span2">호선명<input v-model="form.hull_nm" name="hull_nm" /></label>
       <label>선종<select v-model="form.ship_type" name="ship_type"><option value="">선택</option><option v-for="c in codeList('SHIPTYPE')" :key="c.code" :value="c.code">{{ c.name }}</option></select></label>
@@ -115,16 +120,16 @@ async function delBlock(b) {
       <label>도크/건조장소<input v-model="form.dock_no" name="dock_no" /></label>
       <label>계약일<input v-model="form.contract_dt" name="contract_dt" type="date" /></label>
       <label>인도 예정일<input v-model="form.delivery_dt" name="delivery_dt" type="date" /></label>
-      <label class="chk"><input v-model="form.use_yn" name="use_yn" type="checkbox" />사용</label>
+      <label>사용여부<span class="ck"><input v-model="form.use_yn" name="use_yn" type="checkbox" />사용</span></label>
       <label class="span4">비고<input v-model="form.remark" name="remark" /></label>
       <div class="span4 bar">
         <button class="btn pri" data-test="hull-save" :disabled="!canWrite">저장</button>
         <button v-if="!isNew" class="btn dng" type="button" data-test="hull-delete" :disabled="!canWrite" @click="remove">삭제</button>
-        <span class="muted">삭제 시 블록·공정·도면이 함께 삭제됩니다.</span>
+        <span class="note">삭제 시 블록·공정·도면이 함께 삭제됩니다(FK CASCADE).</span>
       </div>
     </form>
 
-    <div v-else-if="tab === 'ms'">
+    <div v-else-if="tab === 'ms'" class="card">
       <table class="tbl">
         <thead><tr><th>일정</th><th>계획일</th><th>실적일</th><th>차이(일)</th></tr></thead>
         <tbody>
@@ -134,23 +139,23 @@ async function delBlock(b) {
           </tr>
         </tbody>
       </table>
-      <button class="btn pri" data-test="ms-save" :disabled="!canWrite" @click="saveMs">일정 저장</button>
+      <div class="bar sub-acts"><button class="btn pri" data-test="ms-save" :disabled="!canWrite" @click="saveMs">일정 저장</button></div>
     </div>
 
-    <div v-else-if="tab === 'blk'">
+    <div v-else-if="tab === 'blk'" class="card">
       <table class="tbl">
         <thead><tr><th>블록코드</th><th>블록명</th><th>유형</th><th>중량(ton)</th><th>진척</th><th>공정</th><th>도면</th><th></th></tr></thead>
         <tbody>
           <tr v-for="b in blocks" :key="b.block_id" :data-block="b.block_cd">
             <td><b>{{ b.block_cd }}</b></td><td>{{ b.block_nm }}</td><td>{{ codeName('BLOCKTYPE', b.block_type) }}</td>
-            <td class="num">{{ b.weight_ton ?? '' }}</td><td>{{ b.progress === null ? '-' : b.progress + '%' }}</td>
+            <td class="num">{{ b.weight_ton ?? '' }}</td><td style="min-width:110px"><template v-if="b.progress === null">-</template><ProgressBar v-else :value="b.progress" /></td>
             <td class="num">{{ b.plan_count }}</td><td class="num">{{ b.drawing_count }}</td>
             <td><button class="btn sm dng" :disabled="!canWrite" data-test="blk-delete" @click="delBlock(b)">삭제</button></td>
           </tr>
           <tr v-if="!blocks.length"><td colspan="8" class="muted">블록이 없습니다.</td></tr>
         </tbody>
       </table>
-      <form class="bar" data-test="blk-form" @submit.prevent="addBlock">
+      <form class="bar sub-acts" data-test="blk-form" @submit.prevent="addBlock">
         <input v-model="blk.block_cd" name="block_cd" placeholder="블록코드 *" />
         <input v-model="blk.block_nm" name="block_nm" placeholder="블록명" />
         <select v-model="blk.block_type" name="block_type"><option value="">유형 선택</option><option v-for="c in codeList('BLOCKTYPE')" :key="c.code" :value="c.code">{{ c.name }}</option></select>
@@ -174,5 +179,14 @@ async function delBlock(b) {
         <p v-else class="muted">도면이 없습니다.</p>
       </div>
     </div>
+
+    <ShipViewer v-else-if="tab === '3d'" />
   </BaseModal>
 </template>
+
+<style scoped>
+.mnote { margin:0 0 10px; color:var(--muted); font-size:12px; }
+.sub-acts { margin-top:12px; }
+.grid .bar { margin:2px 0 0; }
+.grid .bar .note { margin:0; }
+</style>

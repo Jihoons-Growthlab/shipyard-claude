@@ -48,8 +48,7 @@ onMounted(load)
 
 <template>
   <section class="screen">
-    <h2>도면 결재함</h2>
-    <p class="note">{{ session.user?.display_name || session.user?.emp_no }} 님의 결재 대기와 배포 대기 도면입니다.</p>
+    <div class="ph"><h2>도면 결재함</h2><span class="d">{{ session.user?.display_name || session.user?.emp_no }} 님의 결재 대기와 배포 대기 도면입니다.</span></div>
 
     <div class="card">
       <h3>내 결재 대기 <span class="bdg b-warn" data-test="wait-count">{{ box.waiting.length }}</span></h3>

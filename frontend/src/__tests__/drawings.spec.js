@@ -86,6 +86,15 @@ describe('F07 drawings UI', () => {
     expect(w.find('input[name=change_desc]').exists()).toBe(true)
   })
 
+  it('DWG-T04 upload is enabled only for a DRAFT revision', async () => {
+    detail = DETAIL([REV(1, 'ISSUED')])
+    let w = modal(); await flushPromises()
+    expect(w.find('[data-test=upload]').attributes('disabled')).toBeDefined()
+    detail = DETAIL([REV(1, 'DRAFT')])
+    w = modal(); await flushPromises()
+    expect(w.find('[data-test=upload]').attributes('disabled')).toBeUndefined()
+  })
+
   it('DWG-T10 view-only hides write actions', async () => {
     detail = DETAIL([REV(0, 'DRAFT')])
     const w = modal(7, false); await flushPromises()

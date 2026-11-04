@@ -9,7 +9,7 @@ const groups = computed(() => props.user.groups.map((g) => g.name).join(', ') ||
 
 <template>
   <header class="hdr">
-    <div class="brand">⚓ SWP Shipyard<small>호선 / 공정 / 도면</small></div>
+    <div class="brand">⚓ SWP 조선소 통합관리<small>호선 / 공정 / 도면</small></div>
     <div class="sp" />
     <WeatherWidget />
     <div class="usr">

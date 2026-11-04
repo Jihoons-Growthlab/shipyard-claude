@@ -47,17 +47,9 @@ onUnmounted(() => { alive = false; clearInterval(timer) })
     <span v-else-if="wx.failed" data-test="wx-failed" :title="wx.error">날씨 조회 실패</span>
     <template v-else>
       <span>{{ icon(wx.condition) }}</span><b data-test="wx-temp">{{ wx.tempC ?? '-' }}℃</b><span>{{ wx.condition }}</span>
-      <span class="sub">{{ wx.humidity != null ? `습도 ${wx.humidity}%` : '' }}{{ wx.windMs != null ? ` · 바람 ${wx.windMs}m/s` : '' }}</span>
+      <span>{{ wx.humidity != null ? `습도 ${wx.humidity}%` : '' }}{{ wx.windMs != null ? ` · 바람 ${wx.windMs}m/s` : '' }}</span>
       <span v-if="wx.source === 'LIVE'" class="src live" data-test="wx-badge" :title="`MCP 실시간${wx.obsDt ? ' · 관측 ' + wx.obsDt : ''}`">LIVE</span>
       <span v-else class="src" data-test="wx-badge" :title="`실시간 조회 실패(${wx.error || ''}) — 화면 확인용 샘플값`">샘플</span>
     </template>
   </div>
 </template>
-
-<style scoped>
-.wx { display:flex; align-items:center; gap:6px; font-size:12px; }
-.wx select { font:inherit; padding:2px 4px; }
-.sub { opacity:.7; }
-.src { font-size:10px; padding:1px 5px; border-radius:6px; background:#6b7280; color:#fff; }
-.src.live { background:#10b981; }
-</style>

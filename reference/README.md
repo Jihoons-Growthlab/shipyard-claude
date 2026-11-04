@@ -1,5 +1,7 @@
 # Reference inputs
 
+- `UiImages/README.md`: UI 작업용 이미지 목록, 화면별 코드 연결, 시각적 참고 및 검증 규칙. UI 변경 전에 읽고 해당 PNG를 직접 열어 볼 것.
+
 - `shipyard_mockup.html`: **업로드된 원본과 바이트 단위로 동일한 사본**.
 - `problem_sheet.html`: 경로 계획에만 등장, **아직 미제공**.
 - `completion_report_sample.html`: 경로 계획에만 등장, **아직 미제공**.

@@ -4,6 +4,9 @@ import { computed, inject, nextTick, onMounted, reactive, ref, watch } from 'vue
 import { api } from '../../api/client'
 import { codeList, codeName, loadCodes } from '../../stores/codes'
 import { toast } from '../../stores/toast'
+import ProgressBar from '../../components/ProgressBar.vue'
+import { session } from '../../stores/session'
+import DrawingDetailModal from '../drawings/DrawingDetailModal.vue'
 import PlanPanel from './PlanPanel.vue'
 import { LABEL_W, ROW_H, ZOOMS, initialScroll, layout } from './ganttLayout'
 
@@ -16,6 +19,8 @@ const procs = ref([])
 const users = ref([])
 const scroller = ref(null)
 let scrollLeft = null // null => compute from TODAY (40%)
+const dwg = ref(null) // drawing popup from the panel's linked drawings
+const dwgWrite = computed(() => !!(session.menu || []).find((m) => m.token === 'dwg-list')?.can_write)
 
 const allPlans = computed(() => data.value?.plans || [])
 const rows = computed(() => allPlans.value.filter((p) => !s.block || p.block_id === Number(s.block)))
@@ -74,16 +79,17 @@ defineExpose({ s, scroller })
 </script>
 
 <template>
-  <section class="screen plan">
+  <section class="screen fx plan">
     <div class="ph">
       <h2>{{ menu.title }}</h2>
+      <span class="d">막대 또는 좌측 공정명을 클릭하면 아래에 상세·수정 패널이 열립니다.</span>
       <span v-if="!menu.can_write" class="badge ro" data-test="readonly">조회 전용</span>
     </div>
     <div class="bar">
       <select v-model="s.hull" name="hull"><option v-for="h in hulls" :key="h.hull_no" :value="h.hull_no">{{ h.hull_no }} {{ h.hull_nm }}</option></select>
       <select v-model="s.block" name="block"><option value="">블록 전체</option><option v-for="b in blocks" :key="b.block_id" :value="String(b.block_id)">{{ b.block_cd }} {{ b.block_nm }}</option></select>
       <select v-model.number="s.ppd" name="zoom"><option v-for="z in ZOOMS" :key="z.v" :value="z.v">{{ z.label }}</option></select>
-      <span data-test="hull-progress">호선 진척 {{ data?.hull_progress ?? '-' }}{{ data?.hull_progress != null ? '%' : '' }}</span>
+      <span class="hp" data-test="hull-progress">호선 진척 <span><ProgressBar v-if="data?.hull_progress != null" :value="data.hull_progress" /><template v-else>-</template></span></span>
       <button v-if="menu.can_write" class="btn pri right" data-test="plan-new" @click="remember(); s.sel = 'new'">+ 공정 추가</button>
     </div>
     <div class="glegend">
@@ -119,9 +125,9 @@ defineExpose({ s, scroller })
       </div>
     </div>
 
-    <p v-if="!s.sel" class="muted">막대 또는 좌측 공정명을 클릭하면 상세/수정 패널이 열립니다.</p>
-    <PlanPanel v-else-if="s.sel === 'new' || selPlan" :key="s.sel" :plan="selPlan" :hull-no="s.hull" :default-block-id="s.block ? Number(s.block) : null"
+    <PlanPanel v-if="s.sel === 'new' || selPlan" :key="s.sel" :plan="selPlan" :hull-no="s.hull" :default-block-id="s.block ? Number(s.block) : null"
                :today="data?.today || ''" :all-plans="allPlans" :blocks="blocks" :procs="procs" :users="users" :can-write="menu.can_write"
-               @saved="onSaved" @deleted="onDeleted" @close="s.sel = null" />
+               @saved="onSaved" @deleted="onDeleted" @close="s.sel = null" @open-drawing="dwg = $event" />
+    <DrawingDetailModal v-if="dwg" :drawing-id="dwg" :can-write="dwgWrite" @close="dwg = null" @changed="load" @saved="load" @deleted="dwg = null; load()" />
   </section>
 </template>

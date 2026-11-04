@@ -17,7 +17,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
     <div :class="['modal', { large, xl }]" role="dialog" aria-modal="true" :aria-label="title">
       <header class="modal-h">
         <h3>{{ title }}</h3>
-        <button class="btn icon" data-test="modal-close" aria-label="닫기" @click="emit('close')">✕</button>
+        <button class="btn" data-test="modal-close" @click="emit('close')">닫기 ✕</button>
       </header>
       <div class="modal-b"><slot /></div>
     </div>

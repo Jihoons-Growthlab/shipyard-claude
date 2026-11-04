@@ -3,6 +3,12 @@
 Stack: FastAPI, Vue 3, SQLite.
 Source: reference/shipyard_mockup.html.
 
+## UI reference workflow
+- Before UI creation or visual changes, read `reference/UiImages/README.md`.
+- Open the relevant PNG files with an image-capable tool before editing; filenames alone are not visual evidence.
+- Use those images as the visual reference while preserving feature specs, API behavior, and authorization.
+- Follow the comparison and validation checklist in that README; report any images or browser checks you could not inspect.
+
 ## Workflow
 - Implement only the requested feature.
 - Read its spec in docs/features/ and required dependencies.

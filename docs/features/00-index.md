@@ -13,6 +13,7 @@
 | F07 | 도면/Rev/PDF/연계 | dwg-list, dwg-detail | 1056~1092, 1135~1260 | 03-business-rules, F05 기초 | P0 |
 | F08 | 2단계 도면 결재/배포 | dwg-approval | 1261~1285 | 03-business-rules, F07 | P1 |
 | F09 | 회원관리/그룹/승인 | user-mgmt | 1286~1320 | F01, 02-data-model | P1 |
+| F10 | Unity 샘플 호선 3D 뷰어 (추가 요청) | 기존 호선 상세에서 진입 | F10-ship-viewer.md | F04, unity-viewer-task.md | 구현됨 |
 
 > 역할: F02 셸과 날씨는 논리적으로 분리하여 셸을 P0, 날씨 실제 MCP 연결을 P2로 구현 가능. F05 도면 게이트를 위한 F07 도면 레코드/연계 데이터 계약은 간소화 인터페이스로 먼저 정하고 뒤에서 완성한다.
 

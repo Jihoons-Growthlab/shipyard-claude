@@ -157,3 +157,56 @@ Tests: frontend `npx vitest run` 46 passed; vite build OK; Playwright 1440x900·
 Decisions: NONE. 목업 .dwgx 구조(좌 PDF 뷰어 전체 높이 + 우 섹션 카드 스크롤), 폭 min(85vw,1600px)·높이 94vh, ≤1100px 세로 스택. 리비전 표 7열→5열(사유+파일, 작성자+배포일 2줄 표기, 데이터 동일)
 Next: NONE (기능·API 변경 없음)
 ```
+
+```text
+2026-11-04 / Feature: 전 화면 UI 개선(reference/UiImages 12장 기준) / Result: PASS (아래 미확인 항목 제외)
+Files: frontend/src/styles.css, components/{AppHeader,BaseModal,MenuTree,WeatherWidget,ProgressBar(신규)}.vue, views/AuthView.vue, screens/{dashboard,hulls,plans,progress,drawings,approvals,users}/*.vue, __tests__/{plans,drawings}.spec.js
+Tests: frontend `npx vitest run` 48 passed(신규 2); vite build OK; Playwright 1917x884 12개 화면 캡처 대조, 1440x900·1024x768 가로 넘침 측정, 조회전용(choi.qa) 쓰기 UI 숨김·모달 Esc·메뉴 접기·로그인 오류 표시 확인; backend 변경 없음
+Decisions: 캡처 색은 ICC→sRGB 변환 시 목업 토큰과 일치(팔레트 유지). 캡처의 MOCKUP 문구·데이터 초기화·데모 계정 안내·데모 OTP 문구 미재현. F07 명세 우선으로 리비전 표에 파일명·작성자를 부가 줄로 유지. 샘플 PDF는 DWG-T05에 따라 안내 박스 유지. 공정 패널 도면번호 링크는 목업 openDwg 기준으로 도면 팝업 연결
+Next: 미확인 — 승인대기/DRAFT 등 시드로 확인 못 한 상태 조합의 시각 검토, Windows 폰트 렌더링. 1024px 호선 목록은 표 폭 때문에 패널 내부 가로 스크롤(157px) 발생(페이지 자체 넘침 없음)
+```
+- 근본 원인 수정: 입력 공통 선택자 우선순위가 높아 readonly/disabled 회색이 적용되지 않던 문제(`:where`로 낮춤), body line-height 1.45로 표·메뉴 행이 캡처보다 높던 문제
+
+```text
+2026-11-04 / Feature: F10 Unity 샘플 호선 3D 뷰어 / Result: PASS (아래 미확인 항목 제외)
+Unity: 6000.5.10f1 (Web Build Support 포함, Built-in RP, WebGL2, 압축 Disabled). 6000.3.23f1은 Web 모듈이 없어 미사용
+Files(신규): unity/ShipyardViewer/(Assets/Scripts, Assets/Editor/BuildViewer.cs, Assets/Plugins/WebGL/ViewerBridge.jslib, 씬·재질, Packages, ProjectSettings), frontend/public/unity/ship-viewer/Build/(빌드 산출물 14MB), frontend/src/components/{ShipViewer.vue,unityRuntime.js}, frontend/src/__tests__/shipViewer.spec.js, contracts/unity-viewer.md
+Files(수정): frontend/src/screens/hulls/HullDetailModal.vue, frontend/src/__tests__/hulls.spec.js, docs/features/{F10-ship-viewer,00-index}.md. 백엔드·DB 스키마·API 변경 없음
+Run: 재빌드 명령은 contracts/unity-viewer.md. 실행은 기존처럼 프론트(vite)·백엔드를 띄운 뒤 호선 상세 > 3D 보기
+Tests: frontend `npx vitest run` 56 passed(신규 8); vite build OK; 브라우저 스크린샷 직접 확인 포함
+- T01 Esc·닫기로 상세 복귀, 작성 중 내용·서브탭 유지, 두 번째 Esc로 상세 닫힘, 탭 이동 정상, 조회 전용 계정도 열람 가능
+- T02 Unity canvas에 선체·갑판·선실 렌더링 및 예시 안내 표시 확인
+- T03 회전·줌·이동·정면·측면·상단 동작, 전 조작 후 초기화 시 초기 화면과 픽셀 차이 0.00%, 줌·이동·각도 한계에서 모델 유지
+- T04 build.json 없음(HTML 폴백)·wasm 차단 주입 시 안내 표시, 시점 버튼 비활성, 재시도로 복구
+- T05 로딩 중 닫고 즉시 재오픈, 8회 반복 열기·닫기: canvas 1→0, window/document 리스너 수 고정, 이후 렌더링 정상
+- T07 vite dev와 vite preview(프로덕션 빌드)에서 실행, .wasm=application/wasm 확인, 창 크기 3종 변경 시 canvas 추종·페이지 가로 넘침 없음
+Decisions: 상세 모달은 숨기고 뷰어로 교체(중첩 없음). 파일명은 빌드가 생성하는 build.json에서 읽음. config.showBanner는 공식 매뉴얼에 없어 6000.5 로더 코드로 확인
+Next: 미확인 — Unity Editor GUI에서의 씬 확인(배치 빌드만 수행), 압축 빌드·실제 배포 서버 헤더, 트랙패드 조작, Safari/Firefox, 실 GPU 체감 성능. 빌드 산출물을 git에 포함할지는 사용자 결정 필요
+```
+- 알려진 경고(비차단): 뷰어 종료 시 콘솔에 WebGL 경고 5건(bindFramebuffer invalid target 등). loseContext를 꺼도 동일하게 발생하는 Unity 종료 과정의 경고로 이후 재오픈 렌더링에 영향 없음. vite preview에서 [UnityCache] Content-Length 경고 1건. 콘솔 404는 기존 favicon
+- 기존 동작(F10 무관, 미수정): 호선 상세에서 조회 응답 전에 입력하면 늦게 온 응답이 값을 덮어씀(뷰어 없이도 재현)
+- 구현 중 발견한 사항: Unity 런타임은 canvas id가 필수('#'+id 조회). 선체 정점 병합 시 x=0에서 좌우 현을 분리해야 법선이 0이 되지 않음. 기본 그림자 거리(150)가 궤도 거리보다 짧아 런타임에서 400으로 설정
+
+```text
+2026-11-04 / Feature: F10 진입 방식 변경(버튼 → 호선 상세 서브탭) / Result: PASS
+Files: frontend/src/screens/hulls/HullDetailModal.vue, frontend/src/components/ShipViewer.vue(BaseModal 제거), frontend/src/__tests__/hulls.spec.js, docs/features/F10-ship-viewer.md, contracts/unity-viewer.md. Unity 재빌드 불필요
+Tests: frontend `npx vitest run` 56 passed; vite build OK; 브라우저(조회 전용 계정, 1600x900) — 3D 탭 렌더링·시점 버튼, 탭 이탈 시 canvas 0, 기본정보 복귀 시 작성 내용 유지·재조회 없음, 3회 반복, 로딩 중 탭 이동 후 재진입 시 canvas 1, Esc로 상세 닫힘·canvas 0
+Decisions: 상단 MDI 탭이 아닌 호선 상세 서브탭으로 해석. 3D 탭에서만 모달 xl. 모달이 하나이므로 Esc는 호선 상세를 닫음(이전: 뷰어만 닫음). 제목은 정보 카드에 표시
+Next: 이전 F10 항목의 미확인 사항 동일
+```
+
+```text
+2026-11-04 / Feature: 로그인 화면 디자인 개선(사용자 지시) / Result: PASS
+Files: frontend/src/components/AuthScene.vue(신규, 조선소 새벽 풍경 SVG·외부 이미지 없음), frontend/src/views/AuthView.vue, frontend/src/styles.css
+Tests: frontend `npx vitest run` 56 passed; vite build OK; Playwright 1440x900·1917x884·1100x700·1024x768·390x844 가로 넘침 0, 로그인·오류·회원가입·OTP 화면 및 실제 로그인·로그아웃 확인
+Decisions: login.png의 중앙 카드 대신 좌측 소개+우측 카드(≤1000px은 카드만). 사용자 지시가 시각 기준보다 우선. 소개 문구는 실제 기능만, 수치·데모 계정 미표시. 크레인·경광등 애니메이션은 prefers-reduced-motion에서 정지
+Next: NONE (인증 로직 변경 없음)
+```
+
+```text
+2026-11-04 / Feature: MCP 평가·패키징 / Result: PASS (문서·설정 예시만)
+Files: mcp-recommendations.md, mcp-usage-policy.md, template/.mcp.json, optional-mcp/(README + 예시 4개), docs/handoffs/tool-evidence.md. 루트 .mcp.json·전역 설정 변경 없음, 서버 설치 없음
+Tests: JSON 구조 검증 5개 OK, 자격 증명 패턴 검색 0건. 트랜스크립트 집계 641회 중 Playwright 184, Context7 0, SQLite 0. 기존 Context7·SQLite 연결은 읽기 호출로 확인. template·optional 설정 연결은 미검증
+Decisions: KEEP Playwright / OPTIONAL Context7·Serena·Exa / OMIT Tavily·Memory·SQLite / ADD 없음. 토큰 절감률은 대조군이 없어 미기재
+Next: 루트 .mcp.json 정리 여부는 사용자 결정. 추가 시 서버 하나씩 실험
+```

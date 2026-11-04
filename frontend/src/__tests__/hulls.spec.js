@@ -83,6 +83,33 @@ describe('HULL-T04 detail', () => {
 })
 
 describe('SHELL-T04 hull popup navigation', () => {
+  it('VIEWER-T01 3D tab: view-only users can open it, returning keeps unsaved edits, leaving unmounts the viewer', async () => {
+    const stub = { ShipViewer: { template: '<div data-test="viewer" />' } }
+    const w = mount(HullDetailModal, { props: { hullNo: '8002', canWrite: false }, global: { stubs: stub } })
+    await flushPromises()
+    await w.find('input[name=hull_nm]').setValue('수정중')
+    const fetches = api.hull.mock.calls.length
+    await w.find('[data-subtab="3d"]').trigger('click'); await flushPromises()
+    expect(w.find('[data-test=viewer]').exists()).toBe(true)
+    expect(w.find('.modal').classes()).toContain('xl')
+    await w.find('[data-subtab=info]').trigger('click'); await flushPromises()
+    expect(w.find('[data-test=viewer]').exists()).toBe(false)
+    expect(w.find('.modal').classes()).toContain('large')
+    expect(w.find('input[name=hull_nm]').element.value).toBe('수정중')
+    expect(api.hull.mock.calls.length).toBe(fetches)
+    await w.find('[data-subtab="3d"]').trigger('click')
+    await w.find('[data-subtab=blk]').trigger('click'); await flushPromises() // a tab that was not loaded still loads
+    expect(api.blocks).toHaveBeenCalled()
+    w.unmount()
+  })
+
+  it('new hull has no 3D tab', async () => {
+    const w = mount(HullDetailModal, { props: { hullNo: 'new', canWrite: true } })
+    await flushPromises()
+    expect(w.find('[data-subtab="3d"]').exists()).toBe(false)
+    w.unmount()
+  })
+
   it('summary 간트 보기 / 목록 보기 open target tab with this hull and close the popup', async () => {
     const navigate = vi.fn()
     const w = mount(HullDetailModal, { props: { hullNo: '8002', canWrite: false }, global: { provide: { navigate } } })

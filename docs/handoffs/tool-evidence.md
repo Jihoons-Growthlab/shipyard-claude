@@ -23,3 +23,4 @@
 예: `2026-11-XXT..+09:00 | MCP | 실제서버명/실제도구명 | region=거제 | success | docs/handoffs/logs/...`.
 
 과제 기준에 따라 도구의 실제 입출력 로그, 프롬프트, 시점, 토큰 사용량을 완성보고서에 기록한다. 로그인 키·비밀번호·MCP 비밀 토큰 등은 기록에서 제외.
+| 2026-11-04 | MCP | sqlite (status, list_tables) / context7 (resolve-library-id) | MCP 평가 중 연결 시험, 읽기 전용 | SUCCESS (첫 실호출, 연결 시험 목적) | mcp-recommendations.md |

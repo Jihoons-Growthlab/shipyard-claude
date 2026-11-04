@@ -37,6 +37,7 @@ defineExpose({ f, rows, detail, search })
   <section class="screen dwg">
     <div class="ph">
       <h2>{{ menu.title }}</h2>
+      <span class="d">행 더블클릭 또는 [상세]로 도면 상세·PDF 뷰어·리비전·결재 팝업을 엽니다. Rev는 현재 배포(유효) 리비전입니다.</span>
       <span v-if="!menu.can_write" class="badge ro" data-test="readonly">조회 전용</span>
     </div>
     <div class="bar">
@@ -55,7 +56,7 @@ defineExpose({ f, rows, detail, search })
           <td><b>{{ d.drawing_no }}</b></td><td>{{ d.drawing_nm }}</td><td>{{ d.hull_no }}</td><td>{{ d.block_cd || '-' }}</td>
           <td>{{ codeName('DWGDISC', d.discipline) }}</td>
           <td data-test="rev">Rev{{ d.current_rev_no }}<span v-if="d.latest_rev_no !== d.current_rev_no" class="muted"> (최신 Rev{{ d.latest_rev_no }})</span></td>
-          <td>{{ codeName('DWGSTAT', d.dwg_status) }}</td><td>{{ d.designer_nm || '' }}</td>
+          <td><span :class="['bdg', 'd-' + d.dwg_status.toLowerCase()]">{{ codeName('DWGSTAT', d.dwg_status) }}</span></td><td>{{ d.designer_nm || '' }}</td>
           <td class="num">{{ d.link_count || '-' }}</td>
           <td><button class="btn sm" @click="detail = d.drawing_id">상세</button></td>
         </tr>

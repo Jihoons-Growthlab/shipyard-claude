@@ -131,24 +131,29 @@ async function removeLink(p) {
   try { Object.assign(d.value, await api.unlinkPlan(d.value.drawing_id, p.plan_id)); toast('연계가 해제되었습니다.', 's'); emit('changed') } catch (e) { fail(e) }
 }
 const apResult = (r) => ({ WAIT: '대기', APPROVE: '승인', REJECT: '반려' }[r] || r)
+const fileLabel = (r) => (r.has_file ? r.file_nm : r.file_nm ? `${r.file_nm} (미업로드)` : '파일 없음')
+const AP_BADGE = { WAIT: 'b-warn', APPROVE: 'b-ok', REJECT: 'b-bad' }
 defineExpose({ form, d, viewer, vrev, save, upload, createRev, requestApproval, issue, addLink })
 </script>
 
 <template>
-  <BaseModal open xl :title="title" @close="emit('close')">
+  <BaseModal open :xl="!isNew" :large="isNew" :title="title" @close="emit('close')">
     <div :class="['dwgx', { solo: isNew }]">
       <!-- DWG-03 viewer -->
       <section v-if="!isNew" class="card vcard" data-test="viewer">
+        <h3>도면 뷰어 (PDF)<span class="hint">작성중(DRAFT) 리비전만 업로드·교체·삭제할 수 있습니다.</span></h3>
         <div class="bar">
           <select v-model.number="vrev" name="vrev"><option v-for="r in d?.revisions || []" :key="r.rev_no" :value="r.rev_no">Rev{{ r.rev_no }} ({{ codeName('DWGSTAT', r.rev_status) }})</option></select>
-          <span v-if="shown?.has_file" class="badge" data-test="uploaded">업로드 파일</span>
-          <span v-else class="badge warn" data-test="sample">샘플 PDF (미업로드)</span>
+          <span>{{ shown?.file_nm || '파일 없음' }}</span>
+          <span v-if="shown?.has_file" class="bdg b-ok" data-test="uploaded">업로드 파일</span>
+          <span v-else class="bdg b-warn" data-test="sample">샘플 PDF (미업로드)</span>
           <span class="sp" />
-          <template v-if="canWrite && shown?.rev_status === 'DRAFT'">
-            <label class="btn sm upl">PDF {{ shown.has_file ? '교체' : '업로드' }}<input type="file" accept=".pdf,application/pdf" hidden data-test="upload" @change="upload"></label>
-            <button v-if="shown.has_file" class="btn sm dng" @click="removeFile">파일 삭제</button>
+          <template v-if="canWrite">
+            <input class="upl" type="file" accept=".pdf,application/pdf" data-test="upload" :disabled="shown?.rev_status !== 'DRAFT'"
+                   :title="shown?.rev_status === 'DRAFT' ? '' : '작성중(DRAFT) 리비전만 업로드할 수 있습니다'" @change="upload">
+            <button class="btn" :disabled="!shown?.has_file || shown?.rev_status !== 'DRAFT'" @click="removeFile">파일 삭제</button>
           </template>
-          <button class="btn sm" @click="openNew">새 창 ↗</button>
+          <button class="btn" @click="openNew">새 창으로 열기</button>
         </div>
         <div class="pdfbox">
           <iframe v-if="viewer.url" :src="viewer.url + '#view=FitH'" title="PDF" />
@@ -161,72 +166,72 @@ defineExpose({ form, d, viewer, vrev, save, upload, createRev, requestApproval, 
       </section>
 
       <div class="side">
+        <p v-if="isNew" class="note top">신규 도면은 Rev0(작성중)으로 생성됩니다. PDF는 지금 첨부하거나 등록 후 뷰어에서 업로드할 수 있습니다.</p>
+        <p v-else-if="d" class="note top">{{ d.hull_no }} · {{ codeName('DWGDISC', d.discipline) }} · {{ d.drawing_nm }}</p>
         <!-- DWG-02 form -->
         <section class="card">
-          <h3>도면 정보</h3>
-          <form class="grid4" @submit.prevent="save">
-            <label class="span2">도면번호<input v-model="form.drawing_no" name="drawing_no" :readonly="!isNew"></label>
-            <label class="span2">도면명<input v-model="form.drawing_nm" name="drawing_nm"></label>
-            <label>호선<select v-model="form.hull_no" name="hull_no" :disabled="!isNew" @change="onHullChange"><option v-for="h in hulls" :key="h.hull_no" :value="h.hull_no">{{ h.hull_no }}</option></select></label>
-            <label>블록<select v-model="form.block_id" name="block_id"><option value="">블록 없음</option><option v-for="b in blocks" :key="b.block_id" :value="b.block_id">{{ b.block_cd }} {{ b.block_nm }}</option></select></label>
+          <h3 v-if="!isNew">도면 정보</h3>
+          <form class="grid g2" @submit.prevent="save">
+            <label>도면번호 *<input v-model="form.drawing_no" name="drawing_no" :readonly="!isNew"></label>
             <label>분야<select v-model="form.discipline" name="discipline"><option v-for="c in codeList('DWGDISC')" :key="c.code" :value="c.code">{{ c.name }}</option></select></label>
-            <label>설계자<select v-model="form.designer_emp_no" name="designer_emp_no"><option value="">-</option><option v-for="u in users" :key="u.emp_no" :value="u.emp_no">{{ u.display_name }}</option></select></label>
-            <label v-if="isNew" class="span4">도면 파일 (PDF, 선택)<input type="file" name="pdf" accept=".pdf,application/pdf" @change="newPdf = $event.target.files[0] || null"></label>
-            <div v-if="canWrite" class="span4 acts">
-              <button class="btn pri" type="submit" data-test="save">{{ isNew ? '등록' : '저장' }}</button>
+            <label class="span2">도면명 *<input v-model="form.drawing_nm" name="drawing_nm"></label>
+            <label>호선<select v-model="form.hull_no" name="hull_no" :disabled="!isNew" @change="onHullChange"><option v-for="h in hulls" :key="h.hull_no" :value="h.hull_no">{{ h.hull_no }} {{ h.hull_nm }}</option></select></label>
+            <label>블록<select v-model="form.block_id" name="block_id"><option value="">블록 없음</option><option v-for="b in blocks" :key="b.block_id" :value="b.block_id">{{ b.block_cd }} {{ b.block_nm }}</option></select></label>
+            <label class="span2">설계자<select v-model="form.designer_emp_no" name="designer_emp_no"><option value="">미지정</option><option v-for="u in users" :key="u.emp_no" :value="u.emp_no">{{ u.display_name }} ({{ u.emp_no }})</option></select></label>
+            <label v-if="isNew" class="span2">도면 파일 (PDF, 선택)<input type="file" name="pdf" accept=".pdf,application/pdf" @change="newPdf = $event.target.files[0] || null"></label>
+            <div v-if="canWrite" class="span2 acts">
+              <button class="btn pri" type="submit" data-test="save">저장</button>
               <button v-if="!isNew" class="btn dng" type="button" data-test="delete" @click="remove">삭제</button>
             </div>
           </form>
         </section>
 
         <template v-if="d">
-          <!-- DWG-04 revision actions -->
-          <section v-if="canWrite && latest" class="card" data-test="rev-action">
-            <h3>리비전 작업</h3>
-            <form v-if="['ISSUED', 'OBSOLETE'].includes(latest.rev_status)" class="grid4" @submit.prevent="createRev">
-              <label class="span4">신규 Rev{{ latest.rev_no + 1 }} 개정 사유<input v-model="revForm.change_desc" name="change_desc"></label>
-              <label class="span4">도면 파일 (PDF, 선택)<input type="file" accept=".pdf,application/pdf" @change="revForm.file = $event.target.files[0] || null"></label>
-              <div class="span4 acts"><button class="btn pri" type="submit">신규 Rev 작성</button></div>
-            </form>
-            <form v-else-if="latest.rev_status === 'DRAFT'" class="grid4" @submit.prevent="requestApproval">
-              <div class="span4 note">Rev{{ latest.rev_no }} 작성중입니다. 검토자/승인자를 지정해 결재를 요청하세요.</div>
-              <label class="span2">1단계 검토자<select v-model="apr.reviewer" name="reviewer"><option v-for="u in users" :key="u.emp_no" :value="u.emp_no">{{ u.display_name }}</option></select></label>
-              <label class="span2">2단계 승인자<select v-model="apr.approver" name="approver"><option v-for="u in users" :key="u.emp_no" :value="u.emp_no">{{ u.display_name }}</option></select></label>
-              <div class="span4 acts"><button class="btn pri" type="submit">결재 요청</button></div>
-            </form>
-            <div v-else-if="latest.rev_status === 'REVIEW'" class="note">Rev{{ latest.rev_no }} 결재 진행중입니다. 결재자는 [결재함]에서 처리합니다.</div>
-            <div v-else-if="latest.rev_status === 'APPROVED'" class="acts">
-              <span class="note">Rev{{ latest.rev_no }} 승인 완료 — 배포하면 연계 공정의 도면 게이트가 열립니다.</span>
-              <button class="btn pri" data-test="issue" @click="issue">Rev{{ latest.rev_no }} 배포</button>
-            </div>
-          </section>
-
           <section class="card">
             <h3>리비전 이력 <span class="bdg">{{ d.revisions.length }}</span></h3>
-            <div class="tw">
+            <div class="tw r3">
               <table class="tbl fit" data-test="revisions">
-                <colgroup><col style="width:56px"><col style="width:64px"><col><col style="width:100px"><col style="width:62px"></colgroup>
-                <thead><tr><th>Rev</th><th>상태</th><th>변경 사유 / 파일</th><th>작성 · 배포</th><th /></tr></thead>
+                <colgroup><col style="width:92px"><col style="width:62px"><col><col style="width:92px"></colgroup>
+                <thead><tr><th>Rev</th><th>상태</th><th>변경사유</th><th>배포일</th></tr></thead>
                 <tbody>
                   <tr v-for="r in d.revisions" :key="r.rev_no" :class="{ sel: r.rev_no === shown?.rev_no }">
-                    <td>Rev{{ r.rev_no }}</td><td>{{ codeName('DWGSTAT', r.rev_status) }}</td>
-                    <td class="wrap">{{ r.change_desc }}<div class="sub">{{ r.has_file ? r.file_nm : (r.file_nm ? `${r.file_nm} (미업로드)` : '파일 없음') }}</div></td>
-                    <td>{{ r.author_nm || '-' }}<div class="sub">{{ r.issue_dt || '미배포' }}</div></td>
-                    <td class="num"><button class="btn sm" @click="vrev = r.rev_no">보기</button></td>
+                    <td><b>Rev{{ r.rev_no }}</b> <a class="lnk" href="#" @click.prevent="vrev = r.rev_no">보기</a></td>
+                    <td><span :class="['bdg', 'd-' + r.rev_status.toLowerCase()]">{{ codeName('DWGSTAT', r.rev_status) }}</span></td>
+                    <td class="wrap">{{ r.change_desc }}<div class="sub line" :title="fileLabel(r)">{{ fileLabel(r) }}</div></td>
+                    <td>{{ r.issue_dt || '미배포' }}<div class="sub">{{ r.author_nm || '-' }}</div></td>
                   </tr>
                 </tbody>
               </table>
+            </div>
+            <!-- DWG-04 revision actions -->
+            <div v-if="canWrite && latest" class="revact" data-test="rev-action">
+              <form v-if="['ISSUED', 'OBSOLETE'].includes(latest.rev_status)" class="grid g2" @submit.prevent="createRev">
+                <label class="span2">신규 Rev{{ latest.rev_no + 1 }} 개정 사유<input v-model="revForm.change_desc" name="change_desc"></label>
+                <label>도면 파일 (PDF, 선택)<input type="file" accept=".pdf,application/pdf" @change="revForm.file = $event.target.files[0] || null"></label>
+                <div><button class="btn pri" type="submit">신규 Rev 작성</button></div>
+              </form>
+              <form v-else-if="latest.rev_status === 'DRAFT'" class="grid g2" @submit.prevent="requestApproval">
+                <div class="span2 warnbox flush">Rev{{ latest.rev_no }} 작성중입니다. 검토자/승인자를 지정해 결재를 요청하세요.</div>
+                <label>1단계 검토자<select v-model="apr.reviewer" name="reviewer"><option v-for="u in users" :key="u.emp_no" :value="u.emp_no">{{ u.display_name }} ({{ u.emp_no }})</option></select></label>
+                <label>2단계 승인자<select v-model="apr.approver" name="approver"><option v-for="u in users" :key="u.emp_no" :value="u.emp_no">{{ u.display_name }} ({{ u.emp_no }})</option></select></label>
+                <div class="span2"><button class="btn pri" type="submit">결재 요청</button></div>
+              </form>
+              <div v-else-if="latest.rev_status === 'REVIEW'" class="warnbox flush">Rev{{ latest.rev_no }} 결재 진행중입니다. 결재자는 [결재함]에서 처리합니다.</div>
+              <template v-else-if="latest.rev_status === 'APPROVED'">
+                <div class="okbox">Rev{{ latest.rev_no }} 승인 완료 — 배포하면 연계 공정의 도면 게이트가 열립니다.</div>
+                <button class="btn ok" data-test="issue" @click="issue">Rev{{ latest.rev_no }} 배포</button>
+              </template>
             </div>
           </section>
 
           <section class="card">
             <h3>결재 이력</h3>
-            <div class="tw">
+            <div class="tw r3">
               <table class="tbl" data-test="approvals">
                 <thead><tr><th>Rev</th><th>단계</th><th>결재자</th><th>결과</th></tr></thead>
                 <tbody>
                   <tr v-for="a in d.approvals" :key="a.approval_id" :title="`${a.comment || ''} ${a.act_dt || ''}`">
-                    <td>Rev{{ a.rev_no }}</td><td>{{ a.step_no === 1 ? '검토' : '승인' }}</td><td>{{ a.approver_nm || '' }}</td><td>{{ apResult(a.result) }}</td>
+                    <td>Rev{{ a.rev_no }}</td><td>{{ a.step_no === 1 ? '검토' : '승인' }}</td><td>{{ a.approver_nm || '' }}</td><td><span :class="['bdg', AP_BADGE[a.result]]">{{ apResult(a.result) }}</span></td>
                   </tr>
                   <tr v-if="!d.approvals.length"><td colspan="4" class="empty">결재 이력이 없습니다.</td></tr>
                 </tbody>
@@ -245,7 +250,7 @@ defineExpose({ form, d, viewer, vrev, save, upload, createRev, requestApproval, 
                 <thead><tr><th>공정</th><th>상태</th><th>필수</th><th>필요일</th><th /></tr></thead>
                 <tbody>
                   <tr v-for="p in d.plans" :key="p.plan_id">
-                    <td class="wrap"><a class="lnk" href="#" data-test="go-plan" :title="`${p.plan_start_dt} ~ ${p.plan_end_dt}`" @click.prevent="navigate('plan-gantt', d.hull_no); emit('close')">{{ p.label }}</a></td><td>{{ codeName('PLANSTAT', p.plan_status) }}</td><td>{{ p.required ? '필수' : '참고' }}</td><td>{{ p.need_dt || '' }}</td>
+                    <td class="wrap"><a class="lnk" href="#" data-test="go-plan" :title="`${p.plan_start_dt} ~ ${p.plan_end_dt}`" @click.prevent="navigate('plan-gantt', d.hull_no); emit('close')">{{ p.label }}</a></td><td><span :class="['bdg', 's-' + p.plan_status.toLowerCase()]">{{ codeName('PLANSTAT', p.plan_status) }}</span></td><td>{{ p.required ? '필수' : '참고' }}</td><td>{{ p.need_dt || '' }}</td>
                     <td class="num"><button v-if="canWrite" class="btn sm dng" @click="removeLink(p)">해제</button></td>
                   </tr>
                   <tr v-if="!d.plans.length"><td colspan="5" class="empty">연계된 공정이 없습니다.</td></tr>
@@ -255,7 +260,7 @@ defineExpose({ form, d, viewer, vrev, save, upload, createRev, requestApproval, 
             <div v-if="canWrite" class="bar addlink">
               <select v-model="link.plan_id" name="link_plan"><option value="">공정 선택</option><option v-for="p in d.available_plans" :key="p.plan_id" :value="p.plan_id">{{ p.label }}</option></select>
               <label class="chk"><input v-model="link.required" type="checkbox"> 필수</label>
-              <button class="btn" data-test="link-add" @click="addLink">연계 추가</button>
+              <button class="btn" data-test="link-add" @click="addLink">+ 공정 연계</button>
             </div>
           </section>
         </template>
@@ -266,24 +271,29 @@ defineExpose({ form, d, viewer, vrev, save, upload, createRev, requestApproval, 
 
 <style scoped>
 /* Mockup .dwgx: PDF viewer (fills height) + scrollable side column with section cards. */
-.dwgx { flex:1; min-height:0; display:grid; grid-template-columns:minmax(0,1fr) minmax(480px,42%); gap:14px; }
-.dwgx.solo { grid-template-columns:minmax(0,760px); justify-content:center; }
+.dwgx { flex:1; min-height:0; display:grid; grid-template-columns:minmax(0,1fr) 440px; gap:12px; }
+.dwgx.solo { display:block; }
 .dwgx > * { min-height:0; }
+.solo .side { overflow:visible; padding:0; }
 .vcard { display:flex; flex-direction:column; margin:0; }
 .vcard .sp { flex:1; }
-.upl { display:inline-flex; align-items:center; }
+.hint { font-size:12px; font-weight:400; color:var(--muted); }
+.upl { width:230px; }
 .pdfbox { flex:1; min-height:320px; display:flex; border:1px solid var(--line); border-radius:6px; background:#525659; overflow:hidden; }
 .pdfbox iframe { flex:1; border:0; background:#fff; }
 .pdfmsg { margin:auto; text-align:center; color:#e5e7eb; line-height:1.8; }
 .side { overflow:auto; padding-right:2px; }
 .side .card:last-child { margin-bottom:0; }
+.note.top { margin:2px 0 8px; }
 .acts { display:flex; flex-wrap:wrap; align-items:center; gap:8px; }
-.acts .note { flex:1; margin:0; }
-.tw { max-height:300px; }
+.revact { margin-top:10px; }
+.flush { margin:0; }
+.side .tw.r3 { height:auto; max-height:190px; }
 .tbl.fit { table-layout:fixed; }
-.tbl.fit td, .tbl.fit th { overflow:hidden; text-overflow:ellipsis; }
+.tbl.fit td, .tbl.fit th { overflow:hidden; text-overflow:ellipsis; padding-left:7px; padding-right:7px; }
 .tbl td.empty { padding:12px; }
 .sub { font-size:11.5px; color:var(--muted); margin-top:1px; }
+.sub.line { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .addlink { margin:10px 0 0; }
 .addlink select { flex:1; min-width:0; }
 .chk { display:inline-flex; align-items:center; gap:4px; }

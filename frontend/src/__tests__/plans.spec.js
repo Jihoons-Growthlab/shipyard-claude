@@ -12,6 +12,8 @@ const PLANS = [P(1, 10, '101', '2026-09-01', '2026-09-30', { plan_status: 'DONE'
   P(3, 20, '201', '2026-10-20', '2026-12-31', { drawing_wait: true })]
 const LATE = Object.assign(new Error('선행 공정 종료일이 이 공정의 시작일보다 늦습니다. 그대로 저장할까요?'), { code: 'PRED_LATE_CONFIRM_REQUIRED', status: 409 })
 
+vi.mock('../stores/session', () => ({ session: { menu: [] } }))
+vi.mock('../screens/drawings/DrawingDetailModal.vue', () => ({ default: { name: 'DrawingDetailModal', template: '<div />' } }))
 vi.mock('../api/client', () => ({
   api: {
     codes: vi.fn(async () => ({ PLANSTAT: [{ code: 'PLAN', name: '계획' }, { code: 'DONE', name: '완료' }] })),
@@ -71,6 +73,16 @@ describe('PLAN-T01 gantt screen', () => {
     expect(w.vm.s.block).toBe('')
     expect(w.vm.s.sel).toBe(null)
     expect(api.plans).toHaveBeenLastCalledWith('8002')
+    w.unmount()
+  })
+  it('linked drawing number in the panel opens the drawing popup', async () => {
+    api.planDrawings.mockResolvedValueOnce({ blockers: [], available: [], links: [{ drawing_id: 9, drawing_no: 'D-9', dwg_status: 'ISSUED', has_issued: true, required: true }] })
+    const w = mount(PlanGantt, { props: { menu }, attachTo: document.body })
+    await flushPromises()
+    await w.find('[data-plan="3"]').trigger('click'); await flushPromises()
+    expect(w.findComponent({ name: 'DrawingDetailModal' }).exists()).toBe(false)
+    await w.find('[data-test=open-drawing]').trigger('click')
+    expect(w.findComponent({ name: 'DrawingDetailModal' }).exists()).toBe(true)
     w.unmount()
   })
   it('restores horizontal scroll after a reload (save)', async () => {
