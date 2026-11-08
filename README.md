@@ -58,7 +58,7 @@ Claude Code로 복잡한 웹 애플리케이션을 구현하는 과정에서는 
 
 <div align="center">
 
-![SWP Shipyard Dashboard](reference/ui/dashboard.png)
+![SWP Shipyard Dashboard](reference/UiImages/dashboard.png)
 
 *조선소 통합관리 대시보드 — 주요 KPI 및 공정 진행 현황*
 
@@ -68,7 +68,7 @@ Claude Code로 복잡한 웹 애플리케이션을 구현하는 과정에서는 
 
 <div align="center">
 
-<img src="reference/ui/login.png" width="85%" alt="SWP Shipyard 로그인 화면" />
+<img src="reference/UiImages/login.png" width="85%" alt="SWP Shipyard 로그인 화면" />
 
 *JWT 인증, 사용자 권한 및 TOTP 기반 OTP 인증*
 
