@@ -1,3 +1,5 @@
+<img src="docs/images/cover.png" alt="조선소 통합관리 시스템" width="100%" />
+
 # 🚢 Shipyard Token Optimization
 
 <div align="center">
